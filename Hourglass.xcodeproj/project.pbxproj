@@ -11,6 +11,8 @@
 		075709E124ADA43900F1AE17 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075709E024ADA43900F1AE17 /* ContentView.swift */; };
 		075709E324ADA43B00F1AE17 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 075709E224ADA43B00F1AE17 /* Assets.xcassets */; };
 		075709E624ADA43B00F1AE17 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 075709E524ADA43B00F1AE17 /* Preview Assets.xcassets */; };
+		075709EE24ADA4CE00F1AE17 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075709ED24ADA4CE00F1AE17 /* Event.swift */; };
+		075709F024ADBD2600F1AE17 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075709EF24ADBD2600F1AE17 /* ProgressView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +22,8 @@
 		075709E224ADA43B00F1AE17 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		075709E524ADA43B00F1AE17 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		075709E724ADA43B00F1AE17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		075709ED24ADA4CE00F1AE17 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		075709EF24ADBD2600F1AE17 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +58,8 @@
 			children = (
 				075709DE24ADA43900F1AE17 /* HourglassApp.swift */,
 				075709E024ADA43900F1AE17 /* ContentView.swift */,
+				075709ED24ADA4CE00F1AE17 /* Event.swift */,
+				075709EF24ADBD2600F1AE17 /* ProgressView.swift */,
 				075709E224ADA43B00F1AE17 /* Assets.xcassets */,
 				075709E724ADA43B00F1AE17 /* Info.plist */,
 				075709E424ADA43B00F1AE17 /* Preview Content */,
@@ -139,6 +145,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				075709E124ADA43900F1AE17 /* ContentView.swift in Sources */,
+				075709F024ADBD2600F1AE17 /* ProgressView.swift in Sources */,
+				075709EE24ADA4CE00F1AE17 /* Event.swift in Sources */,
 				075709DF24ADA43900F1AE17 /* HourglassApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
