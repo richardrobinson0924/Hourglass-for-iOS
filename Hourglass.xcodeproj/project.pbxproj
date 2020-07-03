@@ -12,8 +12,44 @@
 		075709E324ADA43B00F1AE17 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 075709E224ADA43B00F1AE17 /* Assets.xcassets */; };
 		075709E624ADA43B00F1AE17 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 075709E524ADA43B00F1AE17 /* Preview Assets.xcassets */; };
 		075709EE24ADA4CE00F1AE17 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075709ED24ADA4CE00F1AE17 /* Event.swift */; };
-		075709F024ADBD2600F1AE17 /* ProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075709EF24ADBD2600F1AE17 /* ProgressView.swift */; };
+		075709F024ADBD2600F1AE17 /* RingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075709EF24ADBD2600F1AE17 /* RingView.swift */; };
+		0757CF8E24AF08F300A156B6 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0757CF7524AF087C00A156B6 /* WidgetKit.framework */; };
+		0757CF8F24AF08F300A156B6 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0757CF7724AF087C00A156B6 /* SwiftUI.framework */; };
+		0757CF9224AF08F300A156B6 /* HourglassWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757CF9124AF08F300A156B6 /* HourglassWidget.swift */; };
+		0757CF9524AF08F400A156B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0757CF9424AF08F400A156B6 /* Assets.xcassets */; };
+		0757CF9724AF08F400A156B6 /* HourglassWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0757CF9324AF08F300A156B6 /* HourglassWidget.intentdefinition */; };
+		0757CF9824AF08F400A156B6 /* HourglassWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 0757CF9324AF08F300A156B6 /* HourglassWidget.intentdefinition */; };
+		0757CF9B24AF08F400A156B6 /* HourglassWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 0757CF8D24AF08F300A156B6 /* HourglassWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		0757CF9F24AF0AB200A156B6 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075709ED24ADA4CE00F1AE17 /* Event.swift */; };
+		0757CFC424AF171A00A156B6 /* RingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075709EF24ADBD2600F1AE17 /* RingView.swift */; };
+		0757CFC624AF1B2900A156B6 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757CFC524AF1B2900A156B6 /* CardView.swift */; };
+		0757CFC724AF1B2900A156B6 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757CFC524AF1B2900A156B6 /* CardView.swift */; };
+		0757CFC924AF2B2100A156B6 /* AddEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0757CFC824AF2B2100A156B6 /* AddEventView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0757CF9924AF08F400A156B6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 075709D324ADA43900F1AE17 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0757CF8C24AF08F300A156B6;
+			remoteInfo = HourglassWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0757CF8524AF087E00A156B6 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				0757CF9B24AF08F400A156B6 /* HourglassWidgetExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		075709DB24ADA43900F1AE17 /* Hourglass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hourglass.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -23,7 +59,18 @@
 		075709E524ADA43B00F1AE17 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		075709E724ADA43B00F1AE17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		075709ED24ADA4CE00F1AE17 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		075709EF24ADBD2600F1AE17 /* ProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressView.swift; sourceTree = "<group>"; };
+		075709EF24ADBD2600F1AE17 /* RingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingView.swift; sourceTree = "<group>"; };
+		0757CF7524AF087C00A156B6 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		0757CF7724AF087C00A156B6 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		0757CF8D24AF08F300A156B6 /* HourglassWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HourglassWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		0757CF9124AF08F300A156B6 /* HourglassWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourglassWidget.swift; sourceTree = "<group>"; };
+		0757CF9324AF08F300A156B6 /* HourglassWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = HourglassWidget.intentdefinition; sourceTree = "<group>"; };
+		0757CF9424AF08F400A156B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0757CF9624AF08F400A156B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0757CFA024AF10CE00A156B6 /* Hourglass.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Hourglass.entitlements; sourceTree = "<group>"; };
+		0757CFAF24AF115B00A156B6 /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
+		0757CFC524AF1B2900A156B6 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		0757CFC824AF2B2100A156B6 /* AddEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEventView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,6 +81,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0757CF8A24AF08F300A156B6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0757CF8F24AF08F300A156B6 /* SwiftUI.framework in Frameworks */,
+				0757CF8E24AF08F300A156B6 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -41,6 +97,8 @@
 			isa = PBXGroup;
 			children = (
 				075709DD24ADA43900F1AE17 /* Hourglass */,
+				0757CF9024AF08F300A156B6 /* HourglassWidget */,
+				0757CF7424AF087C00A156B6 /* Frameworks */,
 				075709DC24ADA43900F1AE17 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -49,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				075709DB24ADA43900F1AE17 /* Hourglass.app */,
+				0757CF8D24AF08F300A156B6 /* HourglassWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -56,10 +115,13 @@
 		075709DD24ADA43900F1AE17 /* Hourglass */ = {
 			isa = PBXGroup;
 			children = (
+				0757CFA024AF10CE00A156B6 /* Hourglass.entitlements */,
 				075709DE24ADA43900F1AE17 /* HourglassApp.swift */,
 				075709E024ADA43900F1AE17 /* ContentView.swift */,
 				075709ED24ADA4CE00F1AE17 /* Event.swift */,
-				075709EF24ADBD2600F1AE17 /* ProgressView.swift */,
+				0757CFC524AF1B2900A156B6 /* CardView.swift */,
+				075709EF24ADBD2600F1AE17 /* RingView.swift */,
+				0757CFC824AF2B2100A156B6 /* AddEventView.swift */,
 				075709E224ADA43B00F1AE17 /* Assets.xcassets */,
 				075709E724ADA43B00F1AE17 /* Info.plist */,
 				075709E424ADA43B00F1AE17 /* Preview Content */,
@@ -75,6 +137,27 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		0757CF7424AF087C00A156B6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0757CF7524AF087C00A156B6 /* WidgetKit.framework */,
+				0757CF7724AF087C00A156B6 /* SwiftUI.framework */,
+				0757CFAF24AF115B00A156B6 /* IntentsUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0757CF9024AF08F300A156B6 /* HourglassWidget */ = {
+			isa = PBXGroup;
+			children = (
+				0757CF9124AF08F300A156B6 /* HourglassWidget.swift */,
+				0757CF9324AF08F300A156B6 /* HourglassWidget.intentdefinition */,
+				0757CF9424AF08F400A156B6 /* Assets.xcassets */,
+				0757CF9624AF08F400A156B6 /* Info.plist */,
+			);
+			path = HourglassWidget;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -85,15 +168,34 @@
 				075709D724ADA43900F1AE17 /* Sources */,
 				075709D824ADA43900F1AE17 /* Frameworks */,
 				075709D924ADA43900F1AE17 /* Resources */,
+				0757CF8524AF087E00A156B6 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				0757CF9A24AF08F400A156B6 /* PBXTargetDependency */,
 			);
 			name = Hourglass;
 			productName = Hourglass;
 			productReference = 075709DB24ADA43900F1AE17 /* Hourglass.app */;
 			productType = "com.apple.product-type.application";
+		};
+		0757CF8C24AF08F300A156B6 /* HourglassWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0757CF9C24AF08F400A156B6 /* Build configuration list for PBXNativeTarget "HourglassWidgetExtension" */;
+			buildPhases = (
+				0757CF8924AF08F300A156B6 /* Sources */,
+				0757CF8A24AF08F300A156B6 /* Frameworks */,
+				0757CF8B24AF08F300A156B6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HourglassWidgetExtension;
+			productName = HourglassWidgetExtension;
+			productReference = 0757CF8D24AF08F300A156B6 /* HourglassWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -105,6 +207,9 @@
 				LastUpgradeCheck = 1200;
 				TargetAttributes = {
 					075709DA24ADA43900F1AE17 = {
+						CreatedOnToolsVersion = 12.0;
+					};
+					0757CF8C24AF08F300A156B6 = {
 						CreatedOnToolsVersion = 12.0;
 					};
 				};
@@ -123,6 +228,7 @@
 			projectRoot = "";
 			targets = (
 				075709DA24ADA43900F1AE17 /* Hourglass */,
+				0757CF8C24AF08F300A156B6 /* HourglassWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -137,6 +243,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0757CF8B24AF08F300A156B6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0757CF9524AF08F400A156B6 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -145,13 +259,36 @@
 			buildActionMask = 2147483647;
 			files = (
 				075709E124ADA43900F1AE17 /* ContentView.swift in Sources */,
-				075709F024ADBD2600F1AE17 /* ProgressView.swift in Sources */,
+				0757CFC924AF2B2100A156B6 /* AddEventView.swift in Sources */,
+				0757CF9824AF08F400A156B6 /* HourglassWidget.intentdefinition in Sources */,
+				075709F024ADBD2600F1AE17 /* RingView.swift in Sources */,
 				075709EE24ADA4CE00F1AE17 /* Event.swift in Sources */,
+				0757CFC624AF1B2900A156B6 /* CardView.swift in Sources */,
 				075709DF24ADA43900F1AE17 /* HourglassApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0757CF8924AF08F300A156B6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0757CF9724AF08F400A156B6 /* HourglassWidget.intentdefinition in Sources */,
+				0757CFC424AF171A00A156B6 /* RingView.swift in Sources */,
+				0757CF9F24AF0AB200A156B6 /* Event.swift in Sources */,
+				0757CF9224AF08F300A156B6 /* HourglassWidget.swift in Sources */,
+				0757CFC724AF1B2900A156B6 /* CardView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0757CF9A24AF08F400A156B6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0757CF8C24AF08F300A156B6 /* HourglassWidgetExtension */;
+			targetProxy = 0757CF9924AF08F400A156B6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		075709E824ADA43B00F1AE17 /* Debug */ = {
@@ -273,8 +410,10 @@
 		075709EB24ADA43B00F1AE17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Hourglass/Hourglass.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Hourglass/Preview Content\"";
 				DEVELOPMENT_TEAM = DS63W44KSD;
@@ -295,8 +434,10 @@
 		075709EC24ADA43B00F1AE17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Hourglass/Hourglass.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Hourglass/Preview Content\"";
 				DEVELOPMENT_TEAM = DS63W44KSD;
@@ -309,6 +450,48 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.richardrobinson.Hourglass;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		0757CF9D24AF08F400A156B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DS63W44KSD;
+				INFOPLIST_FILE = HourglassWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.richardrobinson.Hourglass.HourglassWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		0757CF9E24AF08F400A156B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DS63W44KSD;
+				INFOPLIST_FILE = HourglassWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.richardrobinson.Hourglass.HourglassWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -331,6 +514,15 @@
 			buildConfigurations = (
 				075709EB24ADA43B00F1AE17 /* Debug */,
 				075709EC24ADA43B00F1AE17 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0757CF9C24AF08F400A156B6 /* Build configuration list for PBXNativeTarget "HourglassWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0757CF9D24AF08F400A156B6 /* Debug */,
+				0757CF9E24AF08F400A156B6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
