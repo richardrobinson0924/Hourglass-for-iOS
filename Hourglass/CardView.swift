@@ -99,6 +99,7 @@ extension UIColor {
 
 struct SmallCardView: View {
     @State var event: Event
+    @Binding var angle: Double
     
     let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -157,16 +158,19 @@ struct SmallCardView: View {
         )
         .frame(height: 140)
         .cornerRadius(16)
+        .rotationEffect(Angle(degrees: angle))
     }
 }
 
 struct CardView_Previews: PreviewProvider {
+    @State static var angle: Double = 0
+    
     static var previews: some View {
         SmallCardView(event: Event(
             name: "My Birthday",
             start: .init(),
             end: .init(timeIntervalSinceNow: 1086400),
             gradientIndex: 0
-        )).padding(.horizontal, 16).frame(width: 250)
+        ), angle: $angle).padding(.horizontal, 16).frame(width: 250)
     }
 }

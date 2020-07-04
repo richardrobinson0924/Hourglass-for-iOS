@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		073AE38F24B065CC0031ACBA /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073AE38E24B065CC0031ACBA /* TestView.swift */; };
+		073AE39124B0688F0031ACBA /* AddEventButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073AE39024B0688F0031ACBA /* AddEventButtonView.swift */; };
 		075709DF24ADA43900F1AE17 /* HourglassApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075709DE24ADA43900F1AE17 /* HourglassApp.swift */; };
 		075709E124ADA43900F1AE17 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075709E024ADA43900F1AE17 /* ContentView.swift */; };
 		075709E324ADA43B00F1AE17 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 075709E224ADA43B00F1AE17 /* Assets.xcassets */; };
@@ -52,6 +54,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		073AE38E24B065CC0031ACBA /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		073AE39024B0688F0031ACBA /* AddEventButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEventButtonView.swift; sourceTree = "<group>"; };
 		075709DB24ADA43900F1AE17 /* Hourglass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Hourglass.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		075709DE24ADA43900F1AE17 /* HourglassApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourglassApp.swift; sourceTree = "<group>"; };
 		075709E024ADA43900F1AE17 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -119,6 +123,8 @@
 				075709DE24ADA43900F1AE17 /* HourglassApp.swift */,
 				075709E024ADA43900F1AE17 /* ContentView.swift */,
 				075709ED24ADA4CE00F1AE17 /* Event.swift */,
+				073AE38E24B065CC0031ACBA /* TestView.swift */,
+				073AE39024B0688F0031ACBA /* AddEventButtonView.swift */,
 				0757CFC524AF1B2900A156B6 /* CardView.swift */,
 				075709EF24ADBD2600F1AE17 /* RingView.swift */,
 				0757CFC824AF2B2100A156B6 /* AddEventView.swift */,
@@ -261,7 +267,9 @@
 				075709E124ADA43900F1AE17 /* ContentView.swift in Sources */,
 				0757CFC924AF2B2100A156B6 /* AddEventView.swift in Sources */,
 				0757CF9824AF08F400A156B6 /* HourglassWidget.intentdefinition in Sources */,
+				073AE39124B0688F0031ACBA /* AddEventButtonView.swift in Sources */,
 				075709F024ADBD2600F1AE17 /* RingView.swift in Sources */,
+				073AE38F24B065CC0031ACBA /* TestView.swift in Sources */,
 				075709EE24ADA4CE00F1AE17 /* Event.swift in Sources */,
 				0757CFC624AF1B2900A156B6 /* CardView.swift in Sources */,
 				075709DF24ADA43900F1AE17 /* HourglassApp.swift in Sources */,

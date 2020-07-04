@@ -60,7 +60,11 @@ public struct Event : Codable, Hashable {
 }
 
 struct Model : Codable {
-    var events: [Event] = []
+    var events: [Event] = [] {
+        didSet {
+            save()
+        }
+    }
     
     static let key = "hourglass_model"
     
