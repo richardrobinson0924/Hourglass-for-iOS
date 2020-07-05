@@ -68,12 +68,14 @@ struct ColorChooser<S>: View where S : ShapeStyle {
 
 struct AddEventView: View {
     @State var eventName: String = ""
-    @State var endDate = Date()
+    @State var endDate = Date().addingTimeInterval(60)
     @State var gradientIndex: Int = 0
     
     @Binding var showModal: Bool
     @EnvironmentObject var model: Model
-
+    
+    let existingEvent: Event?
+    
     let linearGradients: [LinearGradient] = Gradient.gradients.map {
         LinearGradient(
             gradient: $0,
@@ -83,6 +85,7 @@ struct AddEventView: View {
     }
     
     let namespace: Namespace.ID
+    let onDismiss: (Event) -> Void
     
     var body: some View {
         VStack(spacing: 30.0) {
@@ -91,7 +94,7 @@ struct AddEventView: View {
                 
                 Spacer()
                 
-                Text("Create Event")
+                Text(existingEvent == nil ? "Create Event" : "Edit Event")
                     .font(.title3)
                     .bold()
                 
@@ -129,9 +132,13 @@ struct AddEventView: View {
             .frame(height: 75)
                         
             Button(action: {
-                let event = Event(name: eventName, start: .init(), end: endDate, gradientIndex: gradientIndex)
-                
-                self.model.addEvent(event)
+                let event = Event(
+                    name: eventName,
+                    start: existingEvent?.start ?? Date(),
+                    end: endDate,
+                    gradientIndex: gradientIndex
+                )
+                onDismiss(event)
                 
                 withAnimation {
                     self.showModal = false
@@ -141,7 +148,7 @@ struct AddEventView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 42)
                     .overlay(
-                        Text("Add Event")
+                        Text(existingEvent == nil ? "Add Event" : "Edit Event")
                             .foregroundColor(.white)
                             .bold()
                     )
@@ -156,6 +163,13 @@ struct AddEventView: View {
         .shadow(radius: 16)
         .animation(.linear)
         .matchedGeometryEffect(id: "box", in: namespace, isSource: true)
+        .onAppear {
+            if let event = existingEvent {
+                self.eventName = event.name
+                self.endDate = event.end
+                self.gradientIndex = event.gradientIndex
+            }
+        }
     }
 
 }
@@ -165,7 +179,7 @@ struct AddEventView_Previews: PreviewProvider {
     @State static var showModal = false
     
     static var previews: some View {
-        AddEventView(showModal: $showModal, namespace: namespace)
+        AddEventView(showModal: $showModal, existingEvent: nil, namespace: namespace) { _ in }
             .frame(width: 300)
     }
 }

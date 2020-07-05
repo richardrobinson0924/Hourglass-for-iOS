@@ -8,24 +8,6 @@
 import Foundation
 import SwiftUI
 
-public class CodedEvent : NSSecureCoding {
-    public static var supportsSecureCoding: Bool = true
-    
-    public let event: Event
-    
-    public func encode(with coder: NSCoder) {
-        try! event.encode(to: coder as! Encoder)
-    }
-    
-    public init(_ event: Event) {
-        self.event = event
-    }
-    
-    public required init?(coder: NSCoder) {
-        event = try! Event(from: coder as! Decoder)
-    }
-}
-
 public struct Event : Codable, Hashable, Equatable {
     let name: String
     let start: Date
@@ -36,22 +18,8 @@ public struct Event : Codable, Hashable, Equatable {
         Gradient.gradients[gradientIndex]
     }
     
-    var timeRemaining: (days: Int, hrs: Int, mins: Int, secs: Int) {
-        get {
-            var secondsRemaining = Int(end.timeIntervalSinceNow)
-            let days = secondsRemaining / (24 * 3600)
-            
-            secondsRemaining %= (24 * 3600)
-            let hours = secondsRemaining / 3600
-            
-            secondsRemaining %= 3600
-            let mins = secondsRemaining / 60
-            
-            secondsRemaining %= 60
-            let seconds = secondsRemaining
-            
-            return (days, hours, mins, seconds)
-        }
+    var timeRemaining: TimeInterval {
+        end.timeIntervalSinceNow
     }
     
     var progress: Double {
@@ -60,13 +28,58 @@ public struct Event : Codable, Hashable, Equatable {
 }
 
 class Model : Codable, ObservableObject {
-    @Published var events: [Event] = [] {
-        didSet {
+    private enum CodingKeys : String, CodingKey {
+        case events
+        case sortedKey
+    }
+    
+    @Published var _events: [Event] = []
+    
+    var events: [Event] {
+        get { _events }
+        set(newValue) {
+            _events = newValue.sorted(by: Model.SortableKeyPaths[sortedKey]!)
             save()
         }
     }
     
-    static let key = "hourglass_model"
+    @Published var _sortedKey: String = SortableKeyPaths.keys.first!
+    
+    var sortedKey: String {
+        get { _sortedKey }
+        set(newValue) {
+            _events.sort(by: Model.SortableKeyPaths[newValue]!)
+            save()
+        }
+    }
+    
+    init(events: [Event] = []) {
+        self.events = events
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try? decoder.container(keyedBy: CodingKeys.self)
+        let events = try? container?.decode([Event].self, forKey: .events)
+        let sortKey = try? container?.decode(String.self, forKey: .sortedKey)
+        
+        self.events = events ?? []
+        self.sortedKey = sortKey ?? Model.SortableKeyPaths.keys.first!
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try! container.encode(events, forKey: .events)
+        try! container.encode(sortedKey, forKey: .sortedKey)
+    }
+}
+
+extension Model {
+    private static let key = "hourglass_model"
+    
+    static let SortableKeyPaths: [String : (Event, Event) -> Bool] = [
+        "Event End Date" : { $0.end < $1.end },
+        "Date Added" : { $0.start < $1.start }
+    ]
     
     static var shared: Model {
         let data = UserDefaults.standard.data(forKey: key)
@@ -77,25 +90,14 @@ class Model : Codable, ObservableObject {
             return Model()
         }
     }
-    
-    init(events: [Event] = []) {
-        self.events = events
-    }
-    
-    required init(from decoder: Decoder) throws {
-        let events = try? [Event].init(from: decoder)
-        self.events = events ?? []
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        try! events.encode(to: encoder)
-    }
-    
+}
+
+extension Model {
     func addEvent(_ event: Event) {
         self.events.append(event)
     }
     
-    func removeEvent(_ event: Event) {
+    func removeEvent(_ event: Event?) {
         self.events.removeAll(where: { $0 == event })
     }
     

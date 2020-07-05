@@ -62,7 +62,7 @@ struct PlaceholderView : View {
     )
     
     var body: some View {
-        CardView(event: event)
+        SmallCardView(event: event)
     }
 }
 
@@ -71,7 +71,7 @@ struct HourglassWidgetEntryView : View {
     var entry: Provider.Entry
     
     var body: some View {
-        CardView(event: entry.event)
+        SmallCardView(event: entry.event)
     }
 }
 

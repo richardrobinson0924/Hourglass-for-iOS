@@ -15,9 +15,11 @@ extension Animation {
 
 struct ContentView: View {
     @State var progress: Double = 0.0
-    @State var editMode: Bool = false
     @State var angle: Double = 0
     @State var showModal: Bool = false
+    @State var showPopover: Bool = false
+    
+    @State var modifiableEvent: Event?
 
     @EnvironmentObject var model: Model
     
@@ -25,15 +27,9 @@ struct ContentView: View {
     
     var columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10), count: 2)
     
-    func animate(while condition: Bool) {
-        self.angle = condition ? -0.6 : 0
-                
-        withAnimation(Animation.linear(duration: 0.125).repeatForever(while: condition)) {
-            self.angle = 0.6
-        }
-        
-        if !condition {
-            self.angle = 0
+    var alertButtons: [Alert.Button] {
+        return Model.SortableKeyPaths.map { key, _ in
+            .default(Text(key)) { model.sortedKey = key }
         }
     }
     
@@ -42,72 +38,54 @@ struct ContentView: View {
             NavigationView {
                 LazyVGrid(columns: columns, spacing: 10) {
                     ForEach(model.events, id: \.self) { event in
-                        ZStack(alignment: .topLeading) {
-                            SmallCardView(event: event, angle: $angle)
-                                .contextMenu {
-                                    Button(action: {}) {
-                                        Text("Edit")
-                                        Image(systemName: "slider.horizontal.3")
+                        SmallCardView(event: event)
+                            .contextMenu {
+                                Button(action: {
+                                    modifiableEvent = event
+                                    withAnimation {
+                                        self.showModal = true
                                     }
-                                    
-                                    Button(action: {
-                                        model.removeEvent(event)
-                                    }) {
-                                        Text("Delete").foregroundColor(.red)
-                                        Image(systemName: "trash").foregroundColor(.red).accentColor(.red)
-                                    }
+                                }) {
+                                    Text("Edit")
+                                    Image(systemName: "slider.horizontal.3")
                                 }
-                            
-                            if self.editMode {
-                                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
-                                    Image(systemName: "xmark.circle.fill")
-                                        .accentColor(.red)
-                                        .imageScale(.large)
-                                        .scaleEffect(1.1)
-                                        .background(
-                                            Circle().foregroundColor(.white)
-                                        )
-                                })
-                                .offset(x: -7, y: -7)
+                                
+                                Button(action: {
+                                    model.removeEvent(event)
+                                }) {
+                                    Text("Delete")
+                                    Image(systemName: "trash")
+                                }
                             }
-                        }
-                        .rotationEffect(Angle(degrees: angle))
                     }
                     
                     if !showModal {
-                        AddEventButtonView(
-                            editMode: $editMode,
-                            showModal: $showModal,
-                            namespace: namespace
-                        )
+                        AddEventButtonView(namespace: namespace) {
+                            modifiableEvent = nil
+                            self.showModal = true
+                        }
                     } else {
                         Spacer().frame(height: 100)
                     }
                 }
                 .padding(.horizontal, 16)
-//                .onLongPressGesture {
-//                    if !self.editMode {
-//                        self.editMode = true
-//                        animate(while: self.editMode)
-//                    }
-//                }
                 .navigationTitle("My Events")
                 .navigationBarItems(
                     leading: Button(action: { }) {
-                        Image(systemName: "ellipsis.circle")
+                        Image(systemName: "ellipsis")
                             .imageScale(.large)
                     },
-                    trailing: Button(
-                        action: {
-                            self.editMode.toggle()
-                            animate(while: self.editMode)
-                        },
-                        label: {
-                            !self.editMode
-                                ? Text("Edit").fontWeight(.medium)
-                                : Text("Done").bold()
-                        }
-                    )
+                    trailing: Button(action: {
+                        self.showPopover = true
+                    }) {
+                        Image(systemName: "arrow.up.arrow.down")
+                            .imageScale(.large)
+                    }.actionSheet(isPresented: $showPopover) {
+                        ActionSheet(
+                            title: Text("Sort Events"),
+                            buttons: alertButtons + [.cancel()]
+                        )
+                    }
                 )
             }
             //.animation(.linear)
@@ -115,8 +93,15 @@ struct ContentView: View {
             .blur(radius: self.showModal ? 16 : 0)
             
             if self.showModal {
-                AddEventView(showModal: $showModal, namespace: namespace)
-                    .padding(.horizontal, 16)
+                AddEventView(
+                    showModal: $showModal,
+                    existingEvent: modifiableEvent,
+                    namespace: namespace
+                ) { event in
+                    self.model.removeEvent(modifiableEvent)
+                    self.model.addEvent(event)
+                }
+                .padding(.horizontal, 16)
             }
             
         }
