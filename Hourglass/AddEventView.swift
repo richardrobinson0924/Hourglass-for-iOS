@@ -162,7 +162,8 @@ struct AddEventView: View {
         .cornerRadius(16)
         .shadow(radius: 16)
         .animation(.linear)
-        .matchedGeometryEffect(id: "box", in: namespace, isSource: true)
+        //.matchedGeometryEffect(id: "box", in: namespace, isSource: true)
+        .matchedGeometryEffect(id: "\(existingEvent?.hashValue ?? -1)", in: namespace, isSource: true)
         .onAppear {
             if let event = existingEvent {
                 self.eventName = event.name

@@ -8,6 +8,10 @@
 import Foundation
 import SwiftUI
 
+public extension CGFloat {
+    static let cardHeight: CGFloat = 140
+}
+
 public struct Event : Codable, Hashable, Equatable {
     let name: String
     let start: Date

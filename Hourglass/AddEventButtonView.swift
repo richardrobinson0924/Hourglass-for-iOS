@@ -16,7 +16,7 @@ struct AddEventButtonView: View {
         Image(systemName: "calendar.badge.plus")
             .renderingMode(.original)
             .scaleEffect(1.75)
-            .frame(height: 100)
+            .frame(height: .cardHeight)
             .frame(maxWidth: .infinity)
             .background(
                 Color.black.opacity(0.01)
@@ -31,7 +31,7 @@ struct AddEventButtonView: View {
                     action()
                 }
             }
-            .matchedGeometryEffect(id: "box", in: namespace, isSource: false)
+            .matchedGeometryEffect(id: "-1", in: namespace, isSource: false)
     }
 }
 

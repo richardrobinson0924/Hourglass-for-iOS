@@ -7,15 +7,8 @@
 
 import SwiftUI
 
-extension Animation {
-    func repeatForever(while expression: Bool) -> Animation {
-        return expression ? self.repeatForever(autoreverses: true) : self
-    }
-}
-
 struct ContentView: View {
     @State var progress: Double = 0.0
-    @State var angle: Double = 0
     @State var showModal: Bool = false
     @State var showPopover: Bool = false
     
@@ -24,6 +17,8 @@ struct ContentView: View {
     @EnvironmentObject var model: Model
     
     @Namespace var namespace
+    
+    //let timer = Timer.publish(every: 1, on: .current, in: .common).autoconnect()
     
     var columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10), count: 2)
     
@@ -57,6 +52,7 @@ struct ContentView: View {
                                     Image(systemName: "trash")
                                 }
                             }
+                            .matchedGeometryEffect(id: "\(event.hashValue)", in: namespace, isSource: false)
                     }
                     
                     if !showModal {

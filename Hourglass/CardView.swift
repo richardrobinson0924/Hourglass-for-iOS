@@ -7,20 +7,6 @@
 
 import SwiftUI
 
-extension UIColor {
-    func adjust(by percentage: CGFloat = 30.0) -> UIColor? {
-        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
-        if self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) {
-            return UIColor(red: min(red + percentage/100, 1.0),
-                           green: min(green + percentage/100, 1.0),
-                           blue: min(blue + percentage/100, 1.0),
-                           alpha: alpha)
-        } else {
-            return nil
-        }
-    }
-}
-
 struct SmallCardView: View {
     @State var event: Event
     
@@ -85,7 +71,7 @@ struct SmallCardView: View {
         }
         .padding(.vertical, 30)
         .padding(.horizontal, 19.0)
-        .frame(height: 140)
+        .frame(height: .cardHeight)
         .background(
             LinearGradient(
                 gradient: event.gradient,
