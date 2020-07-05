@@ -26,7 +26,7 @@ public class CodedEvent : NSSecureCoding {
     }
 }
 
-public struct Event : Codable, Hashable {
+public struct Event : Codable, Hashable, Equatable {
     let name: String
     let start: Date
     let end: Date
@@ -59,8 +59,8 @@ public struct Event : Codable, Hashable {
     }    
 }
 
-struct Model : Codable {
-    var events: [Event] = [] {
+class Model : Codable, ObservableObject {
+    @Published var events: [Event] = [] {
         didSet {
             save()
         }
@@ -68,7 +68,7 @@ struct Model : Codable {
     
     static let key = "hourglass_model"
     
-    static var shared: Model = {
+    static var shared: Model {
         let data = UserDefaults.standard.data(forKey: key)
         
         if let data = data {
@@ -76,7 +76,28 @@ struct Model : Codable {
         } else {
             return Model()
         }
-    }()
+    }
+    
+    init(events: [Event] = []) {
+        self.events = events
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let events = try? [Event].init(from: decoder)
+        self.events = events ?? []
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        try! events.encode(to: encoder)
+    }
+    
+    func addEvent(_ event: Event) {
+        self.events.append(event)
+    }
+    
+    func removeEvent(_ event: Event) {
+        self.events.removeAll(where: { $0 == event })
+    }
     
     func save() {
         let data = try! JSONEncoder().encode(self)

@@ -7,22 +7,85 @@
 
 import SwiftUI
 
+extension View {
+    func hidden(if condition: Bool) -> some View {
+        return condition ? AnyView(EmptyView()) : AnyView(self)
+    }
+}
+
+struct ColorChooser<S>: View where S : ShapeStyle {
+    let options: [S]
+    @Binding var selectedIndex: Int
+    
+    init(_ options: [S], selectedIndex: Binding<Int>) {
+        precondition(!options.isEmpty)
+        precondition(0..<options.count ~= selectedIndex.wrappedValue)
+        
+        self.options = options
+        self._selectedIndex = selectedIndex
+    }
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Text("Select a Color")
+                    .frame(alignment: .leading)
+                
+                Spacer()
+                
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(options[selectedIndex])
+                    .frame(width: 50, height: 22)
+                    .padding(.trailing, 3)
+            }
+        
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 22) {
+                    ForEach(0..<options.count) { i in
+                        Circle()
+                            .fill(options[i])
+                            .overlay(
+                                Circle()
+                                    .foregroundColor(.white)
+                                    .frame(
+                                        width: selectedIndex != i ? 0 : 7,
+                                        height: selectedIndex != i ? 0 : 7
+                                    )
+                                    .animation(
+                                        Animation.spring().speed(2)
+                                    )
+                            )
+                            .onTapGesture {
+                                self.selectedIndex = i
+                            }
+                            .frame(width: 30, height: 30)
+                    }
+                }
+            }
+        }
+    }
+}
+
 struct AddEventView: View {
     @State var eventName: String = ""
     @State var endDate = Date()
-    @State var color: Color = Color.blue
+    @State var gradientIndex: Int = 0
     
-    let onDismiss: (Event?) -> Void
-    
-    var namespace: Namespace.ID
-    
-    init(namespace: Namespace.ID, _ onDismiss: @escaping (Event?) -> Void) {
-        self.namespace = namespace
-        self.onDismiss = onDismiss
-    }
+    @Binding var showModal: Bool
+    @EnvironmentObject var model: Model
 
+    let linearGradients: [LinearGradient] = Gradient.gradients.map {
+        LinearGradient(
+            gradient: $0,
+            startPoint: .topTrailing,
+            endPoint: .bottomLeading
+        )
+    }
+    
+    let namespace: Namespace.ID
+    
     var body: some View {
-        VStack(spacing: 25.0) {
+        VStack(spacing: 30.0) {
             HStack {
                 Spacer().frame(width: 44)
                 
@@ -34,7 +97,9 @@ struct AddEventView: View {
                 
                 Spacer()
                 
-                Button(action: { onDismiss(nil) }) {
+                Button(action: {
+                    self.showModal = false
+                }) {
                     Image(systemName: "xmark.circle.fill")
                         .imageScale(.large)
                 }
@@ -56,13 +121,21 @@ struct AddEventView: View {
                 in: Date()...
             )
             .frame(height: 35)
-                        
-            ColorPicker("Select a Color", selection: $color, supportsOpacity: false)
-            .frame(height: 35)
+            
+            ColorChooser(
+                linearGradients,
+                selectedIndex: $gradientIndex
+            )
+            .frame(height: 75)
                         
             Button(action: {
-                let event = Event(name: eventName, start: .init(), end: endDate, gradientIndex: 0)
-                onDismiss(event)
+                let event = Event(name: eventName, start: .init(), end: endDate, gradientIndex: gradientIndex)
+                
+                self.model.addEvent(event)
+                
+                withAnimation {
+                    self.showModal = false
+                }
             }) {
                 RoundedRectangle(cornerRadius: 13)
                     .frame(maxWidth: .infinity)
@@ -81,16 +154,18 @@ struct AddEventView: View {
         .background(Color.white)
         .cornerRadius(16)
         .shadow(radius: 16)
-        .matchedGeometryEffect(id: "box", in: namespace)
+        .animation(.linear)
+        .matchedGeometryEffect(id: "box", in: namespace, isSource: true)
     }
+
 }
 
 struct AddEventView_Previews: PreviewProvider {
     @Namespace static var namespace
-
+    @State static var showModal = false
     
     static var previews: some View {
-        AddEventView(namespace: namespace) { _ in }
+        AddEventView(showModal: $showModal, namespace: namespace)
             .frame(width: 300)
     }
 }

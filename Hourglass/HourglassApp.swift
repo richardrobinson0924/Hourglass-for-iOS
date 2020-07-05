@@ -11,7 +11,7 @@ import SwiftUI
 struct HourglassApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(model: Model.shared).padding(.horizontal, 16)
+            ContentView().environmentObject(Model.shared)
         }
     }
 }

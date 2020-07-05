@@ -13,19 +13,13 @@ extension Animation {
     }
 }
 
-extension View {
-    func anyView() -> AnyView {
-        AnyView(self)
-    }
-}
-
 struct ContentView: View {
     @State var progress: Double = 0.0
-    @State var model: Model
     @State var editMode: Bool = false
     @State var angle: Double = 0
-    
     @State var showModal: Bool = false
+
+    @EnvironmentObject var model: Model
     
     @Namespace var namespace
     
@@ -33,7 +27,7 @@ struct ContentView: View {
     
     func animate(while condition: Bool) {
         self.angle = condition ? -0.6 : 0
-        
+                
         withAnimation(Animation.linear(duration: 0.125).repeatForever(while: condition)) {
             self.angle = 0.6
         }
@@ -44,58 +38,94 @@ struct ContentView: View {
     }
     
     var body: some View {
-        NavigationView {
-            LazyVGrid(columns: columns, spacing: 10) {
-                ForEach(model.events, id: \.self) { event in
-                    SmallCardView(event: event, angle: $angle)
-                }
-                
-                if !showModal {
-                    AddEventButtonView(
-                        editMode: $editMode,
-                        showModal: $showModal,
-                        namespace: namespace
-                    )
-                } else {
-                    Spacer().frame(height: 100)
-                }
-            }
-            .navigationTitle("My Events")
-            .navigationBarItems(
-                leading: Button(action: { }) {
-                    Image(systemName: "ellipsis.circle")
-                    .imageScale(.large)
-                },
-                trailing: Button(
-                    action: {
-                        self.editMode.toggle()
-                        animate(while: self.editMode)
-                    },
-                    label: {
-                        !self.editMode
-                            ? Text("Edit").fontWeight(.medium)
-                            : Text("Done").bold()
-                    }
-                )
-            )
-        }
-        .overlay(
-            !self.showModal
-                ? EmptyView().anyView()
-                : AddEventView(namespace: namespace) { event in
-                    if let event = event {
-                        Model.shared.events.append(event)
+        ZStack {
+            NavigationView {
+                LazyVGrid(columns: columns, spacing: 10) {
+                    ForEach(model.events, id: \.self) { event in
+                        ZStack(alignment: .topLeading) {
+                            SmallCardView(event: event, angle: $angle)
+                                .contextMenu {
+                                    Button(action: {}) {
+                                        Text("Edit")
+                                        Image(systemName: "slider.horizontal.3")
+                                    }
+                                    
+                                    Button(action: {
+                                        model.removeEvent(event)
+                                    }) {
+                                        Text("Delete").foregroundColor(.red)
+                                        Image(systemName: "trash").foregroundColor(.red).accentColor(.red)
+                                    }
+                                }
+                            
+                            if self.editMode {
+                                Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .accentColor(.red)
+                                        .imageScale(.large)
+                                        .scaleEffect(1.1)
+                                        .background(
+                                            Circle().foregroundColor(.white)
+                                        )
+                                })
+                                .offset(x: -7, y: -7)
+                            }
+                        }
+                        .rotationEffect(Angle(degrees: angle))
                     }
                     
-                    self.showModal = false
-                }.anyView()
-        )
+                    if !showModal {
+                        AddEventButtonView(
+                            editMode: $editMode,
+                            showModal: $showModal,
+                            namespace: namespace
+                        )
+                    } else {
+                        Spacer().frame(height: 100)
+                    }
+                }
+                .padding(.horizontal, 16)
+//                .onLongPressGesture {
+//                    if !self.editMode {
+//                        self.editMode = true
+//                        animate(while: self.editMode)
+//                    }
+//                }
+                .navigationTitle("My Events")
+                .navigationBarItems(
+                    leading: Button(action: { }) {
+                        Image(systemName: "ellipsis.circle")
+                            .imageScale(.large)
+                    },
+                    trailing: Button(
+                        action: {
+                            self.editMode.toggle()
+                            animate(while: self.editMode)
+                        },
+                        label: {
+                            !self.editMode
+                                ? Text("Edit").fontWeight(.medium)
+                                : Text("Done").bold()
+                        }
+                    )
+                )
+            }
+            //.animation(.linear)
+            .brightness(self.showModal ? -0.1 : 0)
+            .blur(radius: self.showModal ? 16 : 0)
+            
+            if self.showModal {
+                AddEventView(showModal: $showModal, namespace: namespace)
+                    .padding(.horizontal, 16)
+            }
+            
+        }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(model: .init(events: [
+        ContentView().environmentObject(Model(events: [
             Event(
                 name: "My Birthday",
                 start: .init(),
@@ -132,6 +162,6 @@ struct ContentView_Previews: PreviewProvider {
                 end: .init(timeIntervalSinceNow: 1086400),
                 gradientIndex: 11
             )
-        ])).padding(.horizontal, 16)
+        ]))
     }
 }

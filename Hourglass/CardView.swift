@@ -108,8 +108,25 @@ struct SmallCardView: View {
     }()
     
     var countdownString: String {
-        let (d, h, m, s) = event.timeRemaining
-        return d > 1 ? "\(d) days" : "\(h):\(m):\(s)"
+        if (Date() >= event.end) {
+            return "Complete!"
+        }
+        
+        switch event.timeRemaining {
+        case (let d, _, _, _) where d > 1:
+            return "\(d) days"
+        case (1, _, _, _):
+            return "1 day"
+        case let (_, h, m, s) where h > 0:
+            return String(format: "%02d:%02d:%02d", h, m, s)
+        case let (_, _, m, s):
+            return String(format: "%02d:%02d", m, s)
+        }
+    }
+    
+    func getProgress() -> Double {
+        let progress = event.progress
+        return 0...1 ~= progress ? 1 - progress : 1
     }
     
     var body: some View {
@@ -140,7 +157,7 @@ struct SmallCardView: View {
                 .bold()
                 .foregroundColor(.white)
             
-            ProgressView(value: 1 - event.progress)
+            ProgressView(value: getProgress())
                 .accentColor(
                     .white
                 )
@@ -158,7 +175,6 @@ struct SmallCardView: View {
         )
         .frame(height: 140)
         .cornerRadius(16)
-        .rotationEffect(Angle(degrees: angle))
     }
 }
 

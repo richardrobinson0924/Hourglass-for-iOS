@@ -33,7 +33,7 @@ struct AddEventButtonView: View {
                     self.showModal = true
                 }
             }
-            .matchedGeometryEffect(id: "box", in: namespace)
+            .matchedGeometryEffect(id: "box", in: namespace, isSource: false)
     }
 }
 
