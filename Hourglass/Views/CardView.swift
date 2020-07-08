@@ -29,17 +29,12 @@ struct SmallCardView: View {
         return formatter.string(from: event.timeRemaining)!
     }
     
-    func getProgress() -> Double {
-        let progress = event.progress
-        return 0...1 ~= progress ? 1 - progress : 1
-    }
-    
     var body: some View {
         VStack {
             HStack {
                 VStack {
                     Text(event.name)
-                        .font(.title2)
+                        .font(.title3)
                         .fontWeight(.bold)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(.white)
@@ -56,31 +51,38 @@ struct SmallCardView: View {
 
             Text(countdownString)
                 .font(
-                    Font.system(.title, design: .rounded)
+                    Font.system(size: 26, design: .rounded)
+                    //Font.system(.title, design: .rounded)
                         .monospacedDigit()
+                        .weight(.bold)
                 )
                 .bold()
                 .foregroundColor(.white)
+                .padding(.bottom, 11.0)
             
-            ProgressView(value: getProgress())
+            Spacer()
+            
+            ProgressView(value: event.progress)
                 .accentColor(
                     .white
                 )
                 //.blendMode(.overlay)
                 .blendMode(.plusLighter)
         }
-        .padding(.vertical, 30)
+        .padding(.vertical, 23.0)
         .padding(.horizontal, 19.0)
         .frame(height: .cardHeight)
         .background(
-            LinearGradient(
+            event.timeRemaining <= 0 ? AnyView(Color.green) : AnyView(LinearGradient(
                 gradient: event.gradient,
                 startPoint: .topTrailing,
                 endPoint: .bottomLeading
-            )
+            ))
         )
         .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .cornerRadius(16)
+        .accessibility(label: Text("\(event.name) event card."))
+        .accessibility(value: Text("\(countdownString) remaining"))
     }
 }
 
@@ -88,9 +90,9 @@ struct CardView_Previews: PreviewProvider {
     static var previews: some View {
         SmallCardView(event: Event(
             name: "My Birthday",
-            start: .init(),
-            end: .init(timeIntervalSinceNow: 1086400),
+            start: .init(timeIntervalSinceNow: -40000),
+            end: .init(timeIntervalSinceNow: -1),
             gradientIndex: 0
-        )).padding(.horizontal, 16).frame(width: 250)
+        )).previewDevice("iPhone 11 Pro").padding(.horizontal, 16).frame(width: 200)
     }
 }

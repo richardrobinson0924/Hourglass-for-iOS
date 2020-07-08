@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct AddEventButtonView: View {
-    var namespace: Namespace.ID
-    
     let action: () -> Void
 
     var body: some View {
@@ -31,16 +29,13 @@ struct AddEventButtonView: View {
                     action()
                 }
             }
-            .matchedGeometryEffect(id: "-1", in: namespace, isSource: false)
     }
 }
 
 struct AddEventButtonView_Previews: PreviewProvider {
     @State static var showModal = false
-    
-    @Namespace static var namespace
-    
+        
     static var previews: some View {
-        AddEventButtonView(namespace: namespace) { }
+        AddEventButtonView() { }
     }
 }

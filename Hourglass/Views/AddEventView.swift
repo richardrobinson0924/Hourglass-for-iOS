@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import EventKit
+import EventKitUI
 
 extension View {
     func hidden(if condition: Bool) -> some View {
@@ -38,7 +40,7 @@ struct ColorChooser<S>: View where S : ShapeStyle {
                     .frame(width: 50, height: 22)
                     .padding(.trailing, 3)
             }
-        
+            
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 22) {
                     ForEach(0..<options.count) { i in
@@ -70,11 +72,14 @@ struct AddEventView: View {
     @State var eventName: String = ""
     @State var endDate = Date().addingTimeInterval(60)
     @State var gradientIndex: Int = 0
+    @State var viewState: CGSize = .zero
     
     @Binding var showModal: Bool
+    
     @EnvironmentObject var model: Model
     
     let existingEvent: Event?
+    let yOffset: CGFloat
     
     let linearGradients: [LinearGradient] = Gradient.gradients.map {
         LinearGradient(
@@ -84,8 +89,9 @@ struct AddEventView: View {
         )
     }
     
-    let namespace: Namespace.ID
-    let onDismiss: (Event) -> Void
+    /// This closure is invoked when the view is dimissed, with a newly created Event passed as its parameter.
+    /// If the user cancelled this action, `nil` is passed as the parameter
+    let onDismiss: (Event?) -> Void
     
     var body: some View {
         VStack(spacing: 30.0) {
@@ -101,7 +107,7 @@ struct AddEventView: View {
                 Spacer()
                 
                 Button(action: {
-                    self.showModal = false
+                    onDismiss(nil)
                 }) {
                     Image(systemName: "xmark.circle.fill")
                         .imageScale(.large)
@@ -112,16 +118,19 @@ struct AddEventView: View {
             .padding(.top, 8)
             
             HStack {
-                Text("Name of Event").padding(.trailing, 20)
+                Text("Event Name").padding(.trailing, 20)
                 
-                TextField("My Birthday", text: $eventName)
+                TextField("New Year's Day", text: $eventName)
+                    .multilineTextAlignment(.trailing)
                     .frame(height: 35)
             }
-                        
+            
+            
             DatePicker(
-                "Date of Event".padding(toLength: 19, withPad: " ", startingAt: 0),
+                "Event Date    ",
                 selection: $endDate,
-                in: Date()...
+                in: Date()...,
+                displayedComponents: [.date, DatePickerComponents.hourAndMinute]
             )
             .frame(height: 35)
             
@@ -130,29 +139,26 @@ struct AddEventView: View {
                 selectedIndex: $gradientIndex
             )
             .frame(height: 75)
-                        
+            
             Button(action: {
+                let adjustedEnd = Calendar.current.date(bySetting: .second, value: 0, of: endDate)!
+                
                 let event = Event(
                     name: eventName,
                     start: existingEvent?.start ?? Date(),
-                    end: endDate,
+                    end: adjustedEnd,
                     gradientIndex: gradientIndex
                 )
                 onDismiss(event)
                 
-                withAnimation {
-                    self.showModal = false
-                }
             }) {
                 RoundedRectangle(cornerRadius: 13)
-                    .frame(maxWidth: .infinity)
                     .frame(height: 42)
                     .overlay(
-                        Text(existingEvent == nil ? "Add Event" : "Edit Event")
+                        Text(existingEvent == nil ? "Add Event" : "Apply Changes")
                             .foregroundColor(.white)
                             .bold()
                     )
-                    .padding(.horizontal, 1)
             }
             .padding(.top, 8)
             .disabled(self.eventName.isEmpty)
@@ -161,9 +167,18 @@ struct AddEventView: View {
         .background(Color.white)
         .cornerRadius(16)
         .shadow(radius: 16)
-        .animation(.linear)
-        //.matchedGeometryEffect(id: "box", in: namespace, isSource: true)
-        .matchedGeometryEffect(id: "\(existingEvent?.hashValue ?? -1)", in: namespace, isSource: true)
+        .offset(
+            x: self.viewState.width,
+            y: self.showModal ? viewState.height : yOffset
+        )
+        .animation(
+            .spring(response: 0.3, dampingFraction: 0.75, blendDuration: 0)
+        )
+        .gesture(
+            DragGesture()
+                .onChanged { self.viewState = $0.translation }
+                .onEnded { _ in self.viewState = .zero }
+        )
         .onAppear {
             if let event = existingEvent {
                 self.eventName = event.name
@@ -172,15 +187,13 @@ struct AddEventView: View {
             }
         }
     }
-
+    
 }
 
 struct AddEventView_Previews: PreviewProvider {
-    @Namespace static var namespace
-    @State static var showModal = false
+    @State static var showModal = true
     
     static var previews: some View {
-        AddEventView(showModal: $showModal, existingEvent: nil, namespace: namespace) { _ in }
-            .frame(width: 300)
+        AddEventView(showModal: $showModal, existingEvent: nil, yOffset: 200) { _ in }.padding(.horizontal)
     }
 }

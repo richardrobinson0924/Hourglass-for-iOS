@@ -7,9 +7,10 @@
 
 import Foundation
 import SwiftUI
+import EventKit
 
 public extension CGFloat {
-    static let cardHeight: CGFloat = 140
+    static let cardHeight: CGFloat = 155
 }
 
 public struct Event : Codable, Hashable, Equatable {
@@ -27,8 +28,78 @@ public struct Event : Codable, Hashable, Equatable {
     }
     
     var progress: Double {
-        get { end.timeIntervalSinceNow / end.timeIntervalSince(start) }
+        let value = 1 - end.timeIntervalSinceNow / end.timeIntervalSince(start)
+        return 0...1 ~= value ? value : 1
     }    
+}
+
+class UserCalendar {
+    enum PermissionError : Error {
+        case permissionDenied
+    }
+    
+    static let shared = UserCalendar()
+    
+    private let store = EKEventStore()
+    
+    private func toEventKitEvent(_ event: Event) -> EKEvent {
+        let calendarEvent = EKEvent(eventStore: self.store)
+        calendarEvent.title = event.name
+        calendarEvent.startDate = event.end
+        calendarEvent.endDate = event.end.addingTimeInterval(3600)
+        calendarEvent.calendar = self.store.defaultCalendarForNewEvents
+        
+        return calendarEvent
+    }
+    
+    func removeEvent(_ event: Event, _ completion: @escaping (Error?) -> Void) {
+        guard EKEventStore.authorizationStatus(for: .event) == .authorized else {
+            completion(nil)
+            return
+        }
+        
+        let calendarEvent = toEventKitEvent(event)
+        
+        do {
+            try self.store.remove(calendarEvent, span: .thisEvent)
+            completion(nil)
+        } catch let error {
+            completion(error)
+        }
+    }
+    
+
+    func addEvent(_ event: Event, _ completion: @escaping (Result<Bool, Error>) -> Void) {
+        let addEventAction: () -> Void = {
+            let calendarEvent = self.toEventKitEvent(event)
+            
+            do {
+                try self.store.save(calendarEvent, span: .thisEvent)
+                completion(.success(true))
+            } catch let error {
+                completion(.failure(error))
+            }
+        }
+        
+        switch EKEventStore.authorizationStatus(for: .event) {
+        case .denied, .restricted:
+            completion(.success(false))
+            
+        case .authorized:
+            addEventAction()
+            
+        case .notDetermined:
+            self.store.requestAccess(to: .event) { (granted, error) in
+                if granted && error == nil {
+                    addEventAction()
+                }
+                completion(.failure(error ?? PermissionError.permissionDenied))
+            }
+            
+        default:
+            completion(.success(false))
+        }
+    }
 }
 
 class Model : Codable, ObservableObject {
