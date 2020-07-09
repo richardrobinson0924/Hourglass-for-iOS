@@ -10,11 +10,7 @@ import AVFoundation
 
 struct ContentView: View {
     @State var progress: Double = 0.0
-    @State var showModal: Bool = false {
-        didSet {
-            print("showModal is now \(showModal)")
-        }
-    }
+    @State var showModal: Bool = false
     @State var showPopover: Bool = false
     @State var errorMessage: String? = nil
     @State var error: Bool = false
@@ -58,7 +54,7 @@ struct ContentView: View {
                         }
                         
                         Button(action: {
-                            model.removeEvent(event)
+                            model.removeEvent(event) { _ in }
                         }) {
                             Text("Delete")
                             Image(systemName: "trash")
@@ -83,10 +79,7 @@ struct ContentView: View {
                 Image(systemName: "arrow.up.arrow.down").imageScale(.large)
             }
             .actionSheet(isPresented: $showPopover) {
-                ActionSheet(
-                    title: Text("Sort Events"),
-                    buttons: alertButtons + [.cancel()]
-                )
+                ActionSheet(title: Text("Sort Events"), buttons: alertButtons + [.cancel()])
             }
         )
     }
@@ -105,22 +98,14 @@ struct ContentView: View {
                 .blur(radius: self.showModal ? 16 : 0)
                 .scaleEffect(self.showModal ? 0.95 : 1)
                 
-                AddEventView(
-                    showModal: $showModal,
-                    existingEvent: modifiableEvent,
-                    yOffset: geometry.size.height / 1.2
-                ) {
+                AddEventView(showModal: $showModal, existingEvent: modifiableEvent, yOffset: geometry.size.height / 1.2) {
                     if let event = $0 {
-                        self.model.removeEvent(modifiableEvent)
-                        self.model.addEvent(event)
+                        self.model.removeEvent(modifiableEvent) { _ in }
                         
-                        UserCalendar.shared.addEvent(event) { result in
-                            switch result {
-                            case .failure(let error):
+                        self.model.addEvent(event) { result in
+                            if case .failure(let error) = result {
                                 self.errorMessage = error.localizedDescription
                                 self.error = true
-                            case .success(_):
-                                return
                             }
                         }
                     }
@@ -144,8 +129,9 @@ struct ContentView: View {
             )
             .alert(isPresented: $error) {
                 Alert(
-                    title: Text("Could not add event to Calendar: \(errorMessage!)"),
-                    dismissButton: .default(Text("Ok"))
+                    title: Text("Could not add event to Calendar"),
+                    message: errorMessage.map { Text($0) },
+                    dismissButton: .default(Text("OK"))
                 )
             }
             .frame(width: geometry.size.width)
@@ -158,6 +144,12 @@ struct ContentView: View {
                 
                 if model.events.contains(where: eventHasJustEnded) {
                     onEventEnd()
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("shortcut"))) { notif in
+                print("received")
+                if notif.object as? Bool == true {
+                    self.showModal = true
                 }
             }
         }

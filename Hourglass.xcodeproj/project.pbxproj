@@ -31,6 +31,7 @@
 		077EA59024B49BF1007E4654 /* Success 1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 077EA58F24B49BF1007E4654 /* Success 1.m4a */; };
 		077EA59224B4C5E3007E4654 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077EA59124B4C5E3007E4654 /* AudioManager.swift */; };
 		077EA59624B4DF67007E4654 /* JokeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077EA59524B4DF67007E4654 /* JokeView.swift */; };
+		07CBA62A24B755C500D66D5F /* Success-1.caf in Resources */ = {isa = PBXBuildFile; fileRef = 07CBA62924B755C500D66D5F /* Success-1.caf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,7 @@
 		077EA58F24B49BF1007E4654 /* Success 1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Success 1.m4a"; sourceTree = "<group>"; };
 		077EA59124B4C5E3007E4654 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		077EA59524B4DF67007E4654 /* JokeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JokeView.swift; sourceTree = "<group>"; };
+		07CBA62924B755C500D66D5F /* Success-1.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Success-1.caf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 		075709DD24ADA43900F1AE17 /* Hourglass */ = {
 			isa = PBXGroup;
 			children = (
+				07CBA62924B755C500D66D5F /* Success-1.caf */,
 				077EA58F24B49BF1007E4654 /* Success 1.m4a */,
 				0757CFA024AF10CE00A156B6 /* Hourglass.entitlements */,
 				075709DE24ADA43900F1AE17 /* HourglassApp.swift */,
@@ -272,6 +275,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07CBA62A24B755C500D66D5F /* Success-1.caf in Resources */,
 				075709E624ADA43B00F1AE17 /* Preview Assets.xcassets in Resources */,
 				077EA59024B49BF1007E4654 /* Success 1.m4a in Resources */,
 				075709E324ADA43B00F1AE17 /* Assets.xcassets in Resources */,

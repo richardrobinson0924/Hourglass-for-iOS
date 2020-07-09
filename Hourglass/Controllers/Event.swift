@@ -33,6 +33,55 @@ public struct Event : Codable, Hashable, Equatable {
     }    
 }
 
+class UserNotifications {
+    static let shared = UserNotifications()
+    
+    private let center = UNUserNotificationCenter.current()
+    
+    func unregisterEventNotification(_ event: Event) {
+        self.center.removePendingNotificationRequests(
+            withIdentifiers: ["\(event.hashValue)"]
+        )
+    }
+    
+    func registerEventNotification(_ event: Event) {
+        self.center.requestAuthorization(options: [.alert, .sound]) { granted, error in
+            guard granted, error == nil else {
+                print(error?.localizedDescription ?? "notification permissions not granted")
+                return
+            }
+            
+            let content = UNMutableNotificationContent()
+            content.title = "Countdown complete!"
+            content.body = "The countdown to \(event.name) is complete! 🎉"
+            content.categoryIdentifier = "countdown"
+            content.sound = UNNotificationSound(
+                named: UNNotificationSoundName(rawValue: "Success 1.caf")
+            )
+            
+            let trigger = UNCalendarNotificationTrigger(
+                dateMatching: Calendar.current.dateComponents(
+                    [.year, .month, .day, .hour, .minute],
+                    from: event.end
+                ),
+                repeats: false
+            )
+            
+            let request = UNNotificationRequest(
+                identifier: "\(event.hashValue)",
+                content: content,
+                trigger: trigger
+            )
+            
+            self.center.add(request) { error in
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+}
+
 class UserCalendar {
     enum PermissionError : Error {
         case permissionDenied
@@ -52,9 +101,9 @@ class UserCalendar {
         return calendarEvent
     }
     
-    func removeEvent(_ event: Event, _ completion: @escaping (Error?) -> Void) {
+    func removeEvent(_ event: Event, _ completion: @escaping (Result<Bool, Error>) -> Void) {
         guard EKEventStore.authorizationStatus(for: .event) == .authorized else {
-            completion(nil)
+            completion(.success(false))
             return
         }
         
@@ -62,9 +111,9 @@ class UserCalendar {
         
         do {
             try self.store.remove(calendarEvent, span: .thisEvent)
-            completion(nil)
+            completion(.success(true))
         } catch let error {
-            completion(error)
+            completion(.failure(error))
         }
     }
     
@@ -168,12 +217,18 @@ extension Model {
 }
 
 extension Model {
-    func addEvent(_ event: Event) {
+    func addEvent(_ event: Event, _ completion: @escaping (Result<Bool, Error>) -> Void) {
         self.events.append(event)
+        UserCalendar.shared.addEvent(event, completion)
+        UserNotifications.shared.registerEventNotification(event)
     }
     
-    func removeEvent(_ event: Event?) {
+    func removeEvent(_ event: Event?, _ completion: @escaping (Result<Bool, Error>) -> Void) {
+        guard let event = event else { return }
+        
         self.events.removeAll(where: { $0 == event })
+        UserCalendar.shared.removeEvent(event, completion)
+        UserNotifications.shared.unregisterEventNotification(event)
     }
     
     func save() {

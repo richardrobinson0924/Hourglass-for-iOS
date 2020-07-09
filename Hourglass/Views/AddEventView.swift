@@ -8,6 +8,43 @@
 import SwiftUI
 import EventKit
 import EventKitUI
+import Combine
+
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
+struct KeyboardAwareModifier: ViewModifier {
+    @State private var keyboardHeight: CGFloat = 0
+
+    private var keyboardHeightPublisher: AnyPublisher<CGFloat, Never> {
+        Publishers.Merge(
+            NotificationCenter.default
+                .publisher(for: UIResponder.keyboardWillShowNotification)
+                .compactMap { $0.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue }
+                .map { $0.cgRectValue.height - 16 },
+            NotificationCenter.default
+                .publisher(for: UIResponder.keyboardWillHideNotification)
+                .map { _ in CGFloat(0) }
+       ).eraseToAnyPublisher()
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .padding(.bottom, keyboardHeight)
+            .onReceive(keyboardHeightPublisher) {
+                self.keyboardHeight = $0
+            }
+    }
+}
+
+extension View {
+    func adaptForKeyboard() -> some View {
+        ModifiedContent(content: self, modifier: KeyboardAwareModifier())
+    }
+}
 
 extension View {
     func hidden(if condition: Bool) -> some View {
@@ -72,7 +109,7 @@ struct AddEventView: View {
     @State var eventName: String = ""
     @State var endDate = Date().addingTimeInterval(60)
     @State var gradientIndex: Int = 0
-    @State var viewState: CGSize = .zero
+    @State var keyboardHeight: CGFloat = 0
     
     @Binding var showModal: Bool
     
@@ -107,6 +144,7 @@ struct AddEventView: View {
                 Spacer()
                 
                 Button(action: {
+                    UIApplication.shared.endEditing()
                     onDismiss(nil)
                 }) {
                     Image(systemName: "xmark.circle.fill")
@@ -168,16 +206,12 @@ struct AddEventView: View {
         .cornerRadius(16)
         .shadow(radius: 16)
         .offset(
-            x: self.viewState.width,
-            y: self.showModal ? viewState.height : yOffset
+            x: 0,
+            y: self.showModal ? 0 : yOffset
         )
+        .adaptForKeyboard()
         .animation(
             .spring(response: 0.3, dampingFraction: 0.75, blendDuration: 0)
-        )
-        .gesture(
-            DragGesture()
-                .onChanged { self.viewState = $0.translation }
-                .onEnded { _ in self.viewState = .zero }
         )
         .onAppear {
             if let event = existingEvent {
