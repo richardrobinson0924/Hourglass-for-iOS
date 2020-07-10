@@ -10,48 +10,6 @@ import EventKit
 import EventKitUI
 import Combine
 
-extension UIApplication {
-    func endEditing() {
-        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-}
-
-struct KeyboardAwareModifier: ViewModifier {
-    @State private var keyboardHeight: CGFloat = 0
-
-    private var keyboardHeightPublisher: AnyPublisher<CGFloat, Never> {
-        Publishers.Merge(
-            NotificationCenter.default
-                .publisher(for: UIResponder.keyboardWillShowNotification)
-                .compactMap { $0.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue }
-                .map { $0.cgRectValue.height - 16 },
-            NotificationCenter.default
-                .publisher(for: UIResponder.keyboardWillHideNotification)
-                .map { _ in CGFloat(0) }
-       ).eraseToAnyPublisher()
-    }
-
-    func body(content: Content) -> some View {
-        content
-            .padding(.bottom, keyboardHeight)
-            .onReceive(keyboardHeightPublisher) {
-                self.keyboardHeight = $0
-            }
-    }
-}
-
-extension View {
-    func adaptForKeyboard() -> some View {
-        ModifiedContent(content: self, modifier: KeyboardAwareModifier())
-    }
-}
-
-extension View {
-    func hidden(if condition: Bool) -> some View {
-        return condition ? AnyView(EmptyView()) : AnyView(self)
-    }
-}
-
 struct ColorChooser<S>: View where S : ShapeStyle {
     let options: [S]
     @Binding var selectedIndex: Int
@@ -79,7 +37,7 @@ struct ColorChooser<S>: View where S : ShapeStyle {
             }
             
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 22) {
+                HStack(spacing: 20) {
                     ForEach(0..<options.count) { i in
                         Circle()
                             .fill(options[i])
@@ -108,15 +66,15 @@ struct ColorChooser<S>: View where S : ShapeStyle {
 struct AddEventView: View {
     @State var eventName: String = ""
     @State var endDate = Date().addingTimeInterval(60)
+    @State var isAddedToCalendar = true
+    
     @State var gradientIndex: Int = 0
-    @State var keyboardHeight: CGFloat = 0
     
     @Binding var showModal: Bool
     
     @EnvironmentObject var model: Model
     
     let existingEvent: Event?
-    let yOffset: CGFloat
     
     let linearGradients: [LinearGradient] = Gradient.gradients.map {
         LinearGradient(
@@ -126,108 +84,95 @@ struct AddEventView: View {
         )
     }
     
+    var accentColor: Color {
+        Gradient.gradients[gradientIndex].stops.first!.color
+    }
+    
     /// This closure is invoked when the view is dimissed, with a newly created Event passed as its parameter.
     /// If the user cancelled this action, `nil` is passed as the parameter
     let onDismiss: (Event?) -> Void
     
     var body: some View {
-        VStack(spacing: 30.0) {
-            HStack {
-                Spacer().frame(width: 44)
-                
-                Spacer()
-                
-                Text(existingEvent == nil ? "Create Event" : "Edit Event")
-                    .font(.title3)
-                    .bold()
-                
-                Spacer()
-                
-                Button(action: {
-                    UIApplication.shared.endEditing()
-                    onDismiss(nil)
-                }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .imageScale(.large)
-                }
-                .frame(width: 44)
-            }
-            .padding(.bottom, 5)
-            .padding(.top, 8)
-            
-            HStack {
-                Text("Event Name").padding(.trailing, 20)
-                
-                TextField("New Year's Day", text: $eventName)
-                    .multilineTextAlignment(.trailing)
-                    .frame(height: 35)
-            }
-            
-            
-            DatePicker(
-                "Event Date    ",
-                selection: $endDate,
-                in: Date()...,
-                displayedComponents: [.date, DatePickerComponents.hourAndMinute]
-            )
-            .frame(height: 35)
-            
-            ColorChooser(
-                linearGradients,
-                selectedIndex: $gradientIndex
-            )
-            .frame(height: 75)
-            
-            Button(action: {
-                let adjustedEnd = Calendar.current.date(bySetting: .second, value: 0, of: endDate)!
-                
-                let event = Event(
-                    name: eventName,
-                    start: existingEvent?.start ?? Date(),
-                    end: adjustedEnd,
-                    gradientIndex: gradientIndex
-                )
-                onDismiss(event)
-                
-            }) {
-                RoundedRectangle(cornerRadius: 13)
-                    .frame(height: 42)
-                    .overlay(
-                        Text(existingEvent == nil ? "Add Event" : "Apply Changes")
-                            .foregroundColor(.white)
-                            .bold()
+        NavigationView {
+            Form {
+                Section {
+                    HStack {
+                        Text("Event Name")
+                        
+                        TextField("New Year's Day", text: $eventName)
+                            .multilineTextAlignment(.trailing)
+                    }
+                    
+                    DatePicker(
+                        "Event Date     ",
+                        selection: $endDate,
+                        in: Date()...,
+                        displayedComponents: [.date, .hourAndMinute]
                     )
+                }
+                
+                Section {
+                    ColorChooser(linearGradients, selectedIndex: $gradientIndex).padding(.vertical, 8)
+                    
+                    Toggle("Add to Calendar", isOn: $isAddedToCalendar)
+                        .toggleStyle(SwitchToggleStyle(tint: accentColor))
+                }
             }
-            .padding(.top, 8)
-            .disabled(self.eventName.isEmpty)
-        }
-        .padding(.all, 16)
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(radius: 16)
-        .offset(
-            x: 0,
-            y: self.showModal ? 0 : yOffset
-        )
-        .adaptForKeyboard()
-        .animation(
-            .spring(response: 0.3, dampingFraction: 0.75, blendDuration: 0)
-        )
-        .onAppear {
-            if let event = existingEvent {
-                self.eventName = event.name
-                self.endDate = event.end
-                self.gradientIndex = event.gradientIndex
+            .listStyle(GroupedListStyle())
+            .environment(\.horizontalSizeClass, .regular)
+            .navigationBarTitle(
+                Text(existingEvent == nil ? "Create Event" : "Edit Event"),
+                displayMode: .inline
+            )
+            .navigationBarItems(
+                leading: Button(action: {
+                    self.showModal.toggle()
+                }) {
+                    Text("Cancel").foregroundColor(accentColor)
+                }, trailing: Button(action: {
+                    let adjustedEnd = Calendar.current.date(bySetting: .second, value: 0, of: endDate)!
+                    
+                    let event = Event(
+                        name: eventName,
+                        start: existingEvent?.start ?? Date(),
+                        end: adjustedEnd,
+                        gradientIndex: gradientIndex
+                    )
+                    
+                    onDismiss(event)
+                }) {
+                    Text("Add").bold().foregroundColor(accentColor)
+                }.disabled(eventName == "" || endDate <= Date()))
+            .accentColor(accentColor)
+            .onAppear {
+                if let event = existingEvent {
+                    self.eventName = event.name
+                    self.endDate = event.end
+                    self.gradientIndex = event.gradientIndex
+                }
             }
         }
     }
     
 }
 
+struct AView: View {
+    @State var showSheetView = true
+    
+    var body: some View {
+        Button(action: {
+            self.showSheetView.toggle()
+        }) {
+            Text("Show Sheet View")
+        }.sheet(isPresented: $showSheetView) {
+            AddEventView(showModal: $showSheetView, existingEvent: nil) { _ in }
+        }
+    }
+}
+
 struct AddEventView_Previews: PreviewProvider {
-    @State static var showModal = true
     
     static var previews: some View {
-        AddEventView(showModal: $showModal, existingEvent: nil, yOffset: 200) { _ in }.padding(.horizontal)
+        AView()
     }
 }

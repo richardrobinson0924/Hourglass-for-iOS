@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 import EventKit
+import WidgetKit
+import Intents
 
 public extension CGFloat {
     static let cardHeight: CGFloat = 155
@@ -206,7 +208,7 @@ extension Model {
     ]
     
     static var shared: Model {
-        let data = UserDefaults.standard.data(forKey: key)
+        let data = UserDefaults(suiteName: "group.hourglass")?.data(forKey: key)
         
         if let data = data {
             return try! JSONDecoder().decode(Model.self, from: data)
@@ -233,7 +235,8 @@ extension Model {
     
     func save() {
         let data = try! JSONEncoder().encode(self)
-        UserDefaults.standard.set(data, forKey: Model.key)
+        UserDefaults(suiteName: "group.hourglass")?.set(data, forKey: Model.key)
+        WidgetCenter.shared.reloadTimelines(ofKind: "HourglassWidget")
     }
 }
 

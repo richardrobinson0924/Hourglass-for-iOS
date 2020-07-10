@@ -20,8 +20,11 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Allow Hourglass to add events to and import events from your Calendar.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
+		<string>AddEventIntentIntent</string>
 		<string>ConfigurationIntent</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
@@ -29,6 +32,17 @@
 		<key>UIApplicationSupportsMultipleScenes</key>
 		<true/>
 	</dict>
+	<key>UIApplicationShortcutItems</key>
+	<array>
+		<dict>
+			<key>UIApplicationShortcutItemIconType</key>
+			<string>UIApplicationShortcutIconTypeAdd</string>
+			<key>UIApplicationShortcutItemTitle</key>
+			<string>Add Event</string>
+			<key>UIApplicationShortcutItemType</key>
+			<string>AddAction</string>
+		</dict>
+	</array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchScreen</key>
@@ -50,18 +64,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    <key>UIApplicationShortcutItems</key>
-    <array>
-        <dict>
-            <key>UIApplicationShortcutItemType</key>
-            <string>AddAction</string>
-            <key>UIApplicationShortcutItemIconType</key>
-            <string>UIApplicationShortcutIconTypeAdd</string>
-            <key>UIApplicationShortcutItemTitle</key>
-            <string>Add Event</string>
-        </dict>
-    </array>
-    <key>NSCalendarsUsageDescription</key>
-    <string>Allow Hourglass to add events to and import events from your Calendar.</string>
 </dict>
 </plist>

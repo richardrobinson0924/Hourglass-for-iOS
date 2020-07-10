@@ -7,8 +7,36 @@
 
 import SwiftUI
 
+/// An implementation of `ProgressView` built in SwiftUI
+struct ProgressView2<V>: View where V: BinaryFloatingPoint {
+    @State private var isShowing = false
+    var value: V
+ 
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Rectangle()
+                    .foregroundColor(.gray)
+                    .opacity(0.3)
+                
+                Rectangle()
+                    .foregroundColor(.accentColor)
+                    .frame(width: self.isShowing
+                            ? geometry.size.width * CGFloat(self.value)
+                            : 0.0)
+                    .animation(.linear(duration: 0.6))
+            }
+            .onAppear { self.isShowing = true }
+            .onChange(of: value) { precondition(0...1 ~= $0) }
+            .cornerRadius(2.0)
+        }
+        .frame(height: 4)
+    }
+}
+
 struct SmallCardView: View {
     @State var event: Event
+    let radius: CGFloat = 20
     
     let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -51,7 +79,7 @@ struct SmallCardView: View {
 
             Text(countdownString)
                 .font(
-                    Font.system(size: 26, design: .rounded)
+                    Font.system(size: 25, design: .rounded)
                     //Font.system(.title, design: .rounded)
                         .monospacedDigit()
                         .weight(.bold)
@@ -61,16 +89,16 @@ struct SmallCardView: View {
                 .padding(.bottom, 11.0)
             
             Spacer()
-            
-            ProgressView(value: event.progress)
+
+            ProgressView2(value: event.progress)
                 .accentColor(
                     .white
                 )
                 //.blendMode(.overlay)
                 .blendMode(.plusLighter)
         }
-        .padding(.vertical, 23.0)
-        .padding(.horizontal, 19.0)
+        .padding(.vertical, 22)
+        .padding(.horizontal)
         .frame(height: .cardHeight)
         .background(
             event.timeRemaining <= 0 ? AnyView(Color.green) : AnyView(LinearGradient(
@@ -79,8 +107,8 @@ struct SmallCardView: View {
                 endPoint: .bottomLeading
             ))
         )
-        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .cornerRadius(16)
+        .contentShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
+        .cornerRadius(radius)
         .accessibility(label: Text("\(event.name) event card."))
         .accessibility(value: Text("\(countdownString) remaining"))
     }
@@ -91,8 +119,8 @@ struct CardView_Previews: PreviewProvider {
         SmallCardView(event: Event(
             name: "My Birthday",
             start: .init(timeIntervalSinceNow: -40000),
-            end: .init(timeIntervalSinceNow: -1),
+            end: .init(timeIntervalSinceNow: 86400),
             gradientIndex: 0
-        )).previewDevice("iPhone 11 Pro").padding(.horizontal, 16).frame(width: 200)
+        )).previewDevice("iPhone 11 Pro").frame(width: .cardHeight)
     }
 }

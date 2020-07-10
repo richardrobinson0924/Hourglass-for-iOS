@@ -85,72 +85,51 @@ struct ContentView: View {
     }
     
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                NavigationView {
-                    ScrollView {
-                        grid.padding(.horizontal, 16)
-                    }
-                    .padding(.top)
+        ZStack {
+            NavigationView {
+                ScrollView {
+                    grid.padding(.horizontal, 16)
                 }
-                .frame(width: geometry.size.width)
-                .brightness(self.showModal ? -0.1 : 0)
-                .blur(radius: self.showModal ? 16 : 0)
-                .scaleEffect(self.showModal ? 0.95 : 1)
-                
-                AddEventView(showModal: $showModal, existingEvent: modifiableEvent, yOffset: geometry.size.height / 1.2) {
-                    if let event = $0 {
-                        self.model.removeEvent(modifiableEvent) { _ in }
-                        
-                        self.model.addEvent(event) { result in
-                            if case .failure(let error) = result {
-                                self.errorMessage = error.localizedDescription
-                                self.error = true
-                            }
+                .padding(.top)
+            }
+
+            EmptyView().id("\(self.now.hashValue)")
+        }
+        .overlay(
+            UIViewWrapper(view: $confettiView)
+                .edgesIgnoringSafeArea(.all)
+                .allowsHitTesting(false)
+        )
+        .sheet(isPresented: $showModal) {
+            AddEventView(showModal: $showModal, existingEvent: modifiableEvent) {
+                if let event = $0 {
+                    self.model.removeEvent(modifiableEvent) { _ in }
+                    
+                    self.model.addEvent(event) { result in
+                        if case .failure(let error) = result {
+                            self.errorMessage = error.localizedDescription
+                            self.error = true
                         }
                     }
-                    
-                    withAnimation {
-                        self.showModal = false
-                    }
                 }
-                //.padding(.horizontal, 16)
-                .zIndex(1.0)
-                .padding(.horizontal)
-                .frame(width: geometry.size.width)
-
-                
-                EmptyView().id("\(self.now.hashValue)")
             }
-            .overlay(
-                UIViewWrapper(view: $confettiView)
-                    .edgesIgnoringSafeArea(.all)
-                    .allowsHitTesting(false)
+        }
+        .alert(isPresented: $error) {
+            Alert(
+                title: Text("Could not add event to Calendar"),
+                message: errorMessage.map { Text($0) },
+                dismissButton: .default(Text("OK"))
             )
-            .alert(isPresented: $error) {
-                Alert(
-                    title: Text("Could not add event to Calendar"),
-                    message: errorMessage.map { Text($0) },
-                    dismissButton: .default(Text("OK"))
-                )
+        }
+        .onReceive(timer) { _ in
+            if !showModal { self.now = Date() }
+            
+            let eventHasJustEnded: (Event) -> Bool = {
+                -1...0 ~= $0.timeRemaining
             }
-            .frame(width: geometry.size.width)
-            .onReceive(timer) { _ in
-                if !showModal { self.now = Date() }
-                
-                let eventHasJustEnded: (Event) -> Bool = {
-                    -1...0 ~= $0.timeRemaining
-                }
-                
-                if model.events.contains(where: eventHasJustEnded) {
-                    onEventEnd()
-                }
-            }
-            .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("shortcut"))) { notif in
-                print("received")
-                if notif.object as? Bool == true {
-                    self.showModal = true
-                }
+            
+            if model.events.contains(where: eventHasJustEnded) {
+                onEventEnd()
             }
         }
     }

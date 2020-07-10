@@ -20,7 +20,7 @@ struct AddEventButtonView: View {
                 Color.black.opacity(0.01)
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: 20)
                     .strokeBorder(Color.blue, lineWidth: 3)
             )
             .animation(.linear(duration: 0.1))
