@@ -29,6 +29,9 @@
 		077EA59024B49BF1007E4654 /* Success 1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 077EA58F24B49BF1007E4654 /* Success 1.m4a */; };
 		077EA59224B4C5E3007E4654 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077EA59124B4C5E3007E4654 /* AudioManager.swift */; };
 		077EA59624B4DF67007E4654 /* JokeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077EA59524B4DF67007E4654 /* JokeView.swift */; };
+		07B8A1A524B9085800D8FDD3 /* HourglassTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B8A1A424B9085800D8FDD3 /* HourglassTests.swift */; };
+		07B8A1AC24B9087F00D8FDD3 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075709ED24ADA4CE00F1AE17 /* Event.swift */; };
+		07B8A1AE24B9E1E200D8FDD3 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B8A1AD24B9E1E200D8FDD3 /* EventView.swift */; };
 		07CBA62A24B755C500D66D5F /* Success-1.caf in Resources */ = {isa = PBXBuildFile; fileRef = 07CBA62924B755C500D66D5F /* Success-1.caf */; };
 		07E381E124B8DC4F005658C6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07E381E024B8DC4F005658C6 /* Assets.xcassets */; };
 		07E381E824B8DC4F005658C6 /* HourglassWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 07E381E724B8DC4F005658C6 /* HourglassWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -54,6 +57,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 0757CF8C24AF08F300A156B6;
 			remoteInfo = HourglassWidgetExtension;
+		};
+		07B8A1A724B9085800D8FDD3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 075709D324ADA43900F1AE17 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 075709DA24ADA43900F1AE17;
+			remoteInfo = Hourglass;
 		};
 		07E381E924B8DC4F005658C6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -141,6 +151,10 @@
 		077EA58F24B49BF1007E4654 /* Success 1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Success 1.m4a"; sourceTree = "<group>"; };
 		077EA59124B4C5E3007E4654 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		077EA59524B4DF67007E4654 /* JokeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JokeView.swift; sourceTree = "<group>"; };
+		07B8A1A224B9085800D8FDD3 /* HourglassTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HourglassTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		07B8A1A424B9085800D8FDD3 /* HourglassTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourglassTests.swift; sourceTree = "<group>"; };
+		07B8A1A624B9085800D8FDD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		07B8A1AD24B9E1E200D8FDD3 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
 		07CBA62924B755C500D66D5F /* Success-1.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Success-1.caf"; sourceTree = "<group>"; };
 		07E381DE24B8DC4E005658C6 /* HourglassWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HourglassWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07E381E024B8DC4F005658C6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -181,6 +195,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		07B8A19F24B9085800D8FDD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		07E381E424B8DC4F005658C6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -208,6 +229,7 @@
 				07E381DF24B8DC4E005658C6 /* HourglassWatch */,
 				07E381EB24B8DC4F005658C6 /* HourglassWatch Extension */,
 				07E3822024B8E260005658C6 /* AddEventIntent */,
+				07B8A1A324B9085800D8FDD3 /* HourglassTests */,
 				0757CF7424AF087C00A156B6 /* Frameworks */,
 				075709DC24ADA43900F1AE17 /* Products */,
 			);
@@ -221,6 +243,7 @@
 				07E381DE24B8DC4E005658C6 /* HourglassWatch.app */,
 				07E381E724B8DC4F005658C6 /* HourglassWatch Extension.appex */,
 				07E3821F24B8E260005658C6 /* AddEventIntent.appex */,
+				07B8A1A224B9085800D8FDD3 /* HourglassTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -284,6 +307,7 @@
 			children = (
 				075709E024ADA43900F1AE17 /* ContentView.swift */,
 				0771A14D24B325B300613007 /* ConfettiView.swift */,
+				07B8A1AD24B9E1E200D8FDD3 /* EventView.swift */,
 				073AE39024B0688F0031ACBA /* AddEventButtonView.swift */,
 				0757CFC524AF1B2900A156B6 /* CardView.swift */,
 				077EA59524B4DF67007E4654 /* JokeView.swift */,
@@ -291,6 +315,15 @@
 				0757CFC824AF2B2100A156B6 /* AddEventView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		07B8A1A324B9085800D8FDD3 /* HourglassTests */ = {
+			isa = PBXGroup;
+			children = (
+				07B8A1A424B9085800D8FDD3 /* HourglassTests.swift */,
+				07B8A1A624B9085800D8FDD3 /* Info.plist */,
+			);
+			path = HourglassTests;
 			sourceTree = "<group>";
 		};
 		07E381DF24B8DC4E005658C6 /* HourglassWatch */ = {
@@ -380,6 +413,24 @@
 			productReference = 0757CF8D24AF08F300A156B6 /* HourglassWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		07B8A1A124B9085800D8FDD3 /* HourglassTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07B8A1A924B9085800D8FDD3 /* Build configuration list for PBXNativeTarget "HourglassTests" */;
+			buildPhases = (
+				07B8A19E24B9085800D8FDD3 /* Sources */,
+				07B8A19F24B9085800D8FDD3 /* Frameworks */,
+				07B8A1A024B9085800D8FDD3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				07B8A1A824B9085800D8FDD3 /* PBXTargetDependency */,
+			);
+			name = HourglassTests;
+			productName = HourglassTests;
+			productReference = 07B8A1A224B9085800D8FDD3 /* HourglassTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		07E381DD24B8DC4E005658C6 /* HourglassWatch */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 07E3820424B8DC50005658C6 /* Build configuration list for PBXNativeTarget "HourglassWatch" */;
@@ -446,6 +497,10 @@
 					0757CF8C24AF08F300A156B6 = {
 						CreatedOnToolsVersion = 12.0;
 					};
+					07B8A1A124B9085800D8FDD3 = {
+						CreatedOnToolsVersion = 12.0;
+						TestTargetID = 075709DA24ADA43900F1AE17;
+					};
 					07E381DD24B8DC4E005658C6 = {
 						CreatedOnToolsVersion = 12.0;
 					};
@@ -475,6 +530,7 @@
 				07E381DD24B8DC4E005658C6 /* HourglassWatch */,
 				07E381E624B8DC4F005658C6 /* HourglassWatch Extension */,
 				07E3821E24B8E260005658C6 /* AddEventIntent */,
+				07B8A1A124B9085800D8FDD3 /* HourglassTests */,
 			);
 		};
 /* End PBXProject section */
@@ -496,6 +552,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				0757CF9524AF08F400A156B6 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07B8A1A024B9085800D8FDD3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -532,6 +595,7 @@
 			files = (
 				075709E124ADA43900F1AE17 /* ContentView.swift in Sources */,
 				077EA59624B4DF67007E4654 /* JokeView.swift in Sources */,
+				07B8A1AE24B9E1E200D8FDD3 /* EventView.swift in Sources */,
 				0757CFC924AF2B2100A156B6 /* AddEventView.swift in Sources */,
 				07367D3224B39BE400C41B4F /* JokeModel.swift in Sources */,
 				073AE39124B0688F0031ACBA /* AddEventButtonView.swift in Sources */,
@@ -553,6 +617,15 @@
 				0757CF9F24AF0AB200A156B6 /* Event.swift in Sources */,
 				0757CF9224AF08F300A156B6 /* HourglassWidget.swift in Sources */,
 				0757CFC724AF1B2900A156B6 /* CardView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		07B8A19E24B9085800D8FDD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07B8A1AC24B9087F00D8FDD3 /* Event.swift in Sources */,
+				07B8A1A524B9085800D8FDD3 /* HourglassTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -585,6 +658,11 @@
 			isa = PBXTargetDependency;
 			target = 0757CF8C24AF08F300A156B6 /* HourglassWidgetExtension */;
 			targetProxy = 0757CF9924AF08F400A156B6 /* PBXContainerItemProxy */;
+		};
+		07B8A1A824B9085800D8FDD3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 075709DA24ADA43900F1AE17 /* Hourglass */;
+			targetProxy = 07B8A1A724B9085800D8FDD3 /* PBXContainerItemProxy */;
 		};
 		07E381EA24B8DC4F005658C6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -812,6 +890,46 @@
 			};
 			name = Release;
 		};
+		07B8A1AA24B9085800D8FDD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DS63W44KSD;
+				INFOPLIST_FILE = HourglassTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.richardrobinson.HourglassTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hourglass.app/Hourglass";
+			};
+			name = Debug;
+		};
+		07B8A1AB24B9085800D8FDD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DS63W44KSD;
+				INFOPLIST_FILE = HourglassTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.richardrobinson.HourglassTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hourglass.app/Hourglass";
+			};
+			name = Release;
+		};
 		07E3820124B8DC50005658C6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -970,6 +1088,15 @@
 			buildConfigurations = (
 				0757CF9D24AF08F400A156B6 /* Debug */,
 				0757CF9E24AF08F400A156B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		07B8A1A924B9085800D8FDD3 /* Build configuration list for PBXNativeTarget "HourglassTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				07B8A1AA24B9085800D8FDD3 /* Debug */,
+				07B8A1AB24B9085800D8FDD3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

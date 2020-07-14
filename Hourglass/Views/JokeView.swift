@@ -14,14 +14,14 @@ struct JokeView: View {
         Group {
             Text(text)
         }.onAppear {
-            Joke.getJokeOfTheDay { joke, error in
-                guard error == nil else {
-                    self.text = (error?.localizedDescription ?? "q")
-                    return
-                }
-                
-                self.text = joke?.text?.replacingOccurrences(of: "\r\n", with: " ") ?? "aaa"
-            }
+//            Joke.getJokeOfTheDay { joke, error in
+//                guard error == nil else {
+//                    self.text = (error?.localizedDescription ?? "q")
+//                    return
+//                }
+//                
+//                self.text = joke?.text?.replacingOccurrences(of: "\r\n", with: " ") ?? "aaa"
+//            }
         }
     }
 }

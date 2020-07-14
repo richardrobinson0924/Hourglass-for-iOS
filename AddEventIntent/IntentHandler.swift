@@ -8,24 +8,46 @@
 import Intents
 
 class IntentHandler: INExtension, AddEventIntentHandling {
+    func resolveAddToCalendar(for intent: AddEventIntent, with completion: @escaping (INBooleanResolutionResult) -> Void) {
+        if let addToCalendar = intent.addToCalendar {
+            completion(.success(with: Bool(truncating: addToCalendar)))
+        } else {
+            completion(.success(with: true))
+        }
+    }
+    
+    func resolveEndDate(for intent: AddEventIntent, with completion: @escaping (INDateComponentsResolutionResult) -> Void) {
+        if let end = intent.endDate {
+            completion(.success(with: end))
+        } else {
+            completion(.needsValue())
+        }
+    }
+    
     func handle(intent: AddEventIntent, completion: @escaping (AddEventIntentResponse) -> Void) {
         guard let name = intent.eventName, let end = intent.endDate else { return }
         let event = Event(
             name: name,
             start: Date(),
             end: Calendar.current.date(from: end)!,
-            gradientIndex: 0
+            gradientIndex: max(intent.color.rawValue - 1, 0)
         )
-        
+                
         Model.shared.addEvent(event) { result in
-            if case .success(true) = result {
+            switch result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(false):
+                print("couldn't add to calendar")
+                fallthrough
+            default:
                 completion(.success(eventName: name, endDate: end))
             }
         }
     }
     
     func resolveEventName(for intent: AddEventIntent, with completion: @escaping (INStringResolutionResult) -> Void) {
-        if let name = intent.eventName, !name.isEmpty, name != "My Event" {
+        if let name = intent.eventName, !name.isEmpty {
             completion(.success(with: name))
         } else {
             completion(.needsValue())

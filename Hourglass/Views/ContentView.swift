@@ -88,7 +88,7 @@ struct ContentView: View {
         ZStack {
             NavigationView {
                 ScrollView {
-                    grid.padding(.horizontal, 16)
+                    grid.padding(.horizontal)
                 }
                 .padding(.top)
             }

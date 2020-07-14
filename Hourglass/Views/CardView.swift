@@ -109,6 +109,7 @@ struct SmallCardView: View {
         )
         .contentShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
         .cornerRadius(radius)
+        .shadow(color: event.gradient.stops[0].color.opacity(0.3), radius: 3, x: 0, y: 3)
         .accessibility(label: Text("\(event.name) event card."))
         .accessibility(value: Text("\(countdownString) remaining"))
     }

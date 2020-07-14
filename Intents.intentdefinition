@@ -27,23 +27,123 @@
 				</dict>
 				<dict>
 					<key>INEnumValueDisplayName</key>
-					<string>Blue</string>
+					<string>Red</string>
 					<key>INEnumValueDisplayNameID</key>
-					<string>azyZaY</string>
+					<string>oNPDDo</string>
 					<key>INEnumValueIndex</key>
 					<integer>1</integer>
 					<key>INEnumValueName</key>
-					<string>blue</string>
+					<string>red</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Deep Orange</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>e0l67H</string>
+					<key>INEnumValueIndex</key>
+					<integer>2</integer>
+					<key>INEnumValueName</key>
+					<string>deepOrange</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Orange</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>gicKui</string>
+					<key>INEnumValueIndex</key>
+					<integer>3</integer>
+					<key>INEnumValueName</key>
+					<string>orange</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Yellow</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>bAoqUB</string>
+					<key>INEnumValueIndex</key>
+					<integer>4</integer>
+					<key>INEnumValueName</key>
+					<string>yellow</string>
 				</dict>
 				<dict>
 					<key>INEnumValueDisplayName</key>
 					<string>Green</string>
 					<key>INEnumValueDisplayNameID</key>
-					<string>t9jIOa</string>
+					<string>SkevA0</string>
 					<key>INEnumValueIndex</key>
-					<integer>2</integer>
+					<integer>5</integer>
 					<key>INEnumValueName</key>
 					<string>green</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Teal</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>wotGTh</string>
+					<key>INEnumValueIndex</key>
+					<integer>6</integer>
+					<key>INEnumValueName</key>
+					<string>teal</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Light Blue</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>ceKC64</string>
+					<key>INEnumValueIndex</key>
+					<integer>7</integer>
+					<key>INEnumValueName</key>
+					<string>lightBlue</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Sky Blue</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>pzfQnz</string>
+					<key>INEnumValueIndex</key>
+					<integer>8</integer>
+					<key>INEnumValueName</key>
+					<string>skyBlue</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Blue</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>66Tv8M</string>
+					<key>INEnumValueIndex</key>
+					<integer>9</integer>
+					<key>INEnumValueName</key>
+					<string>blue</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Indigo</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>Pa7jTC</string>
+					<key>INEnumValueIndex</key>
+					<integer>10</integer>
+					<key>INEnumValueName</key>
+					<string>indigo</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Purple</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>IN6Z6C</string>
+					<key>INEnumValueIndex</key>
+					<integer>11</integer>
+					<key>INEnumValueName</key>
+					<string>purple</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Pink</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>szjIPK</string>
+					<key>INEnumValueIndex</key>
+					<integer>12</integer>
+					<key>INEnumValueName</key>
+					<string>pink</string>
 				</dict>
 			</array>
 		</dict>
@@ -72,10 +172,10 @@
 			<key>INIntentInput</key>
 			<string>endDate</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>5</integer>
+			<integer>7</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
-				<key>endDate,eventName,color</key>
+				<key>endDate,eventName,color,addToCalendar</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
@@ -91,18 +191,7 @@
 			<string>AddEvent</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
-				<key></key>
-				<dict>
-					<key>INIntentParameterCombinationIsPrimary</key>
-					<true/>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Add Event</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>rjpxx5</string>
-				</dict>
-				<key>endDate,eventName,color</key>
+				<key>endDate,eventName,color,addToCalendar</key>
 				<dict>
 					<key>INIntentParameterCombinationIsLinked</key>
 					<true/>
@@ -111,7 +200,7 @@
 					<key>INIntentParameterCombinationTitle</key>
 					<string>Add Event</string>
 					<key>INIntentParameterCombinationTitleID</key>
-					<string>AUr0K5</string>
+					<string>6bjfDC</string>
 				</dict>
 			</dict>
 			<key>INIntentParameters</key>
@@ -120,59 +209,15 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>End Date</string>
-					<key>INIntentParameterDisplayNameID</key>
-					<string>E0WwoN</string>
-					<key>INIntentParameterDisplayPriority</key>
-					<integer>1</integer>
-					<key>INIntentParameterMetadata</key>
-					<dict>
-						<key>INIntentParameterMetadataDateStyle</key>
-						<string>Full</string>
-						<key>INIntentParameterMetadataFormat</key>
-						<string>Style</string>
-						<key>INIntentParameterMetadataTemplateID</key>
-						<string>pZ4AOG</string>
-						<key>INIntentParameterMetadataTimeStyle</key>
-						<string>Full</string>
-						<key>INIntentParameterMetadataType</key>
-						<string>DateTime</string>
-					</dict>
-					<key>INIntentParameterName</key>
-					<string>endDate</string>
-					<key>INIntentParameterPromptDialogs</key>
-					<array>
-						<dict>
-							<key>INIntentParameterPromptDialogCustom</key>
-							<true/>
-							<key>INIntentParameterPromptDialogType</key>
-							<string>Configuration</string>
-						</dict>
-						<dict>
-							<key>INIntentParameterPromptDialogCustom</key>
-							<true/>
-							<key>INIntentParameterPromptDialogType</key>
-							<string>Primary</string>
-						</dict>
-					</array>
-					<key>INIntentParameterTag</key>
-					<integer>2</integer>
-					<key>INIntentParameterType</key>
-					<string>DateComponents</string>
-				</dict>
-				<dict>
-					<key>INIntentParameterConfigurable</key>
-					<true/>
-					<key>INIntentParameterDisplayName</key>
 					<string>Name of Event</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>przlQD</string>
 					<key>INIntentParameterDisplayPriority</key>
-					<integer>2</integer>
+					<integer>1</integer>
 					<key>INIntentParameterMetadata</key>
 					<dict>
 						<key>INIntentParameterMetadataCapitalization</key>
-						<string>Sentences</string>
+						<string>Words</string>
 						<key>INIntentParameterMetadataDefaultValue</key>
 						<string>My Event</string>
 						<key>INIntentParameterMetadataDefaultValueID</key>
@@ -209,6 +254,56 @@
 				<dict>
 					<key>INIntentParameterConfigurable</key>
 					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>End Date</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>E0WwoN</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>2</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataDateStyle</key>
+						<string>Full</string>
+						<key>INIntentParameterMetadataFormat</key>
+						<string>Style</string>
+						<key>INIntentParameterMetadataTemplateID</key>
+						<string>pZ4AOG</string>
+						<key>INIntentParameterMetadataTimeStyle</key>
+						<string>Full</string>
+						<key>INIntentParameterMetadataType</key>
+						<string>DateTime</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>endDate</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>When is ${eventName}?</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>smn9ql</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>2</integer>
+					<key>INIntentParameterType</key>
+					<string>DateComponents</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
 					<key>INIntentParameterCustomDisambiguation</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
@@ -221,6 +316,11 @@
 					<string>INColor</string>
 					<key>INIntentParameterEnumTypeNamespace</key>
 					<string>Fyubip</string>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataDefaultValue</key>
+						<string>unknown</string>
+					</dict>
 					<key>INIntentParameterName</key>
 					<string>color</string>
 					<key>INIntentParameterPromptDialogs</key>
@@ -265,6 +365,56 @@
 					<key>INIntentParameterType</key>
 					<string>Integer</string>
 				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Add To Calendar</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>66vOdA</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>4</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataDefaultValue</key>
+						<true/>
+						<key>INIntentParameterMetadataFalseDisplayName</key>
+						<string>No</string>
+						<key>INIntentParameterMetadataFalseDisplayNameID</key>
+						<string>kDgDWw</string>
+						<key>INIntentParameterMetadataTrueDisplayName</key>
+						<string>Yes</string>
+						<key>INIntentParameterMetadataTrueDisplayNameID</key>
+						<string>HcE8RD</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>addToCalendar</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>Do you want to add ${eventName} to your Calendar</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>wQxg7g</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>7</integer>
+					<key>INIntentParameterType</key>
+					<string>Boolean</string>
+				</dict>
 			</array>
 			<key>INIntentResponse</key>
 			<dict>
@@ -286,7 +436,7 @@
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>8</integer>
+				<integer>10</integer>
 				<key>INIntentResponseParameters</key>
 				<array>
 					<dict>
@@ -347,6 +497,31 @@
 						<integer>8</integer>
 						<key>INIntentResponseParameterType</key>
 						<string>Integer</string>
+					</dict>
+					<dict>
+						<key>INIntentResponseParameterDisplayName</key>
+						<string>Add To Calendar</string>
+						<key>INIntentResponseParameterDisplayNameID</key>
+						<string>cZ1Q8T</string>
+						<key>INIntentResponseParameterDisplayPriority</key>
+						<integer>4</integer>
+						<key>INIntentResponseParameterMetadata</key>
+						<dict>
+							<key>INIntentResponseParameterMetadataFalseDisplayName</key>
+							<string>No</string>
+							<key>INIntentResponseParameterMetadataFalseDisplayNameID</key>
+							<string>VaqQ8D</string>
+							<key>INIntentResponseParameterMetadataTrueDisplayName</key>
+							<string>Yes</string>
+							<key>INIntentResponseParameterMetadataTrueDisplayNameID</key>
+							<string>JvcqBs</string>
+						</dict>
+						<key>INIntentResponseParameterName</key>
+						<string>addToCalendar</string>
+						<key>INIntentResponseParameterTag</key>
+						<integer>10</integer>
+						<key>INIntentResponseParameterType</key>
+						<string>Boolean</string>
 					</dict>
 				</array>
 			</dict>

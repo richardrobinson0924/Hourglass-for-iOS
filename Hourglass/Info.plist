@@ -24,6 +24,7 @@
 	<string>Allow Hourglass to add events to and import events from your Calendar.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
+		<string>AddEventIntent</string>
 		<string>AddEventIntentIntent</string>
 		<string>ConfigurationIntent</string>
 	</array>

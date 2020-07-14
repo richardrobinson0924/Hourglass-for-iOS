@@ -11,7 +11,7 @@ struct AddEventButtonView: View {
     let action: () -> Void
 
     var body: some View {
-        Image(systemName: "calendar.badge.plus")
+        Image(systemName: "hourglass.badge.plus")
             .renderingMode(.original)
             .scaleEffect(1.75)
             .frame(height: .cardHeight)
