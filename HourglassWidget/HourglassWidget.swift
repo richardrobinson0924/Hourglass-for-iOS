@@ -8,10 +8,10 @@
 import WidgetKit
 import SwiftUI
 import Intents
-
+import CoreData
 
 struct WidgetCardView: View {
-    @State var event: Event
+    @State var event: Event?
     let radius: CGFloat = 20
     
     let dateFormatter: DateFormatter = {
@@ -21,7 +21,11 @@ struct WidgetCardView: View {
     }()
     
     var countdownString: String {
-        if (Date() >= event.end) {
+        guard let event = event else {
+            return "Complete!"
+        }
+        
+        if (Date() >= event.endDate!) {
             return "Complete!"
         }
         
@@ -37,13 +41,13 @@ struct WidgetCardView: View {
         VStack {
             HStack {
                 VStack {
-                    Text(event.name)
+                    Text(event?.name ?? "-------")
                         .font(.title3)
                         .fontWeight(.bold)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(.white)
 
-                    Text(dateFormatter.string(from: event.end))
+                    Text(dateFormatter.string(from: event?.endDate! ?? .init()))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(Color.white.opacity(0.75))
@@ -53,7 +57,7 @@ struct WidgetCardView: View {
 
             Spacer()
 
-            Text(event.end, style: .relative)
+            Text(event?.endDate ?? .init(), style: .relative)
                 .font(
                     Font.system(.title3, design: .rounded)
                     //Font.system(.title, design: .rounded)
@@ -66,7 +70,7 @@ struct WidgetCardView: View {
             
             Spacer()
 
-            ProgressView2(value: event.progress)
+            ProgressView2(value: event?.progress ?? 1.0)
                 .accentColor(
                     .white
                 )
@@ -76,42 +80,36 @@ struct WidgetCardView: View {
         .padding(.vertical, 18)
         .padding(.horizontal)
         .background(
-            event.timeRemaining <= 0 ? AnyView(Color.green) : AnyView(LinearGradient(
-                gradient: event.gradient,
+            event?.timeRemaining ?? 0 <= 0 ? AnyView(Color.green) : AnyView(LinearGradient(
+                gradient: event?.gradient ?? Gradient(colors: [.green]),
                 startPoint: .topTrailing,
                 endPoint: .bottomLeading
             ))
         )
-        .accessibility(label: Text("\(event.name) event card."))
+        .accessibility(label: Text("\(event?.name ?? "") event card."))
         .accessibility(value: Text("\(countdownString) remaining"))
     }
 }
 
 struct Provider: TimelineProvider {
+    @FetchRequest(fetchRequest: DataProvider.allEventsFetchRequest()) var events: FetchedResults<Event>
+    
     public func snapshot(with context: Context, completion: @escaping (SimpleEntry) -> ()) {
         let date = Date()
-        
-        let event = context.isPreview
-            ? Event(
-                name: "My Birthday",
-                start: date,
-                end: date.addingTimeInterval(172800),
-                gradientIndex: 0
-            ) : Model.shared.events.first!
-        
-        let entry = SimpleEntry(date: date, event: event)
+    
+        let entry = SimpleEntry(date: date, event: events.first)
         completion(entry)
     }
     
     public func timeline(with context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         let date = Date()
         let nextUpdateDate = Calendar.current.date(byAdding: .second, value: 1, to: date)!
-        
+
         var entry: SimpleEntry?
-        if let event = Model.shared.events.first {
+        if let event = events.first {
             entry = SimpleEntry(date: date, event: event)
         }
-        
+
         let timeline = Timeline(entries: entry == nil ? [] : [entry!], policy: .after(nextUpdateDate))
         completion(timeline)
     }
@@ -119,29 +117,23 @@ struct Provider: TimelineProvider {
 
 struct SimpleEntry: TimelineEntry {
     public let date: Date
-    public let event: Event
+    public let event: Event?
 }
 
 struct PlaceholderView : View {
     @Environment(\.widgetFamily) var family: WidgetFamily
-    let event = Event(
-        name: "----------",
-        start: Date(),
-        end: Date().addingTimeInterval(86400),
-        gradientIndex: 6
-    )
-    
+        
     var body: some View {
-        WidgetCardView(event: event)
+        EmptyView()
     }
 }
 
 struct HourglassWidgetEntryView : View {
     @Environment(\.widgetFamily) var family: WidgetFamily
-    let event: Event
+    let event: Event?
     
     var body: some View {
-        SmallCardView(event: event)
+        WidgetCardView(event: event)
     }
 }
 

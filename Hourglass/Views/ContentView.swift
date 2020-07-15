@@ -7,27 +7,32 @@
 
 import SwiftUI
 import AVFoundation
+import CoreData
 
 struct ContentView: View {
     @State var progress: Double = 0.0
     @State var showModal: Bool = false
     @State var showPopover: Bool = false
-    @State var errorMessage: String? = nil
     @State var error: Bool = false
     
     @State var modifiableEvent: Event?
     @State var now: Date = Date()
     @State var confettiView = ConfettiUIView()
-        
-    @EnvironmentObject var model: Model
     
     let timer = Timer.publish(every: 1, on: .current, in: .common).autoconnect()
     let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10), count: 2)
     
+    @FetchRequest(
+        fetchRequest: DataProvider.allEventsFetchRequest()
+    ) var events: FetchedResults<Event>
+    
+    @Environment(\.managedObjectContext) var context: NSManagedObjectContext
+    
     var alertButtons: [Alert.Button] {
-        return Model.SortableKeyPaths.map { key, _ in
-            .default(Text(key)) { model.sortedKey = key }
-        }
+//        return Model.SortableKeyPaths.map { key, _ in
+//            .default(Text(key)) { model.sortedKey = key }
+//        }
+        return []
     }
     
     func onEventEnd() {
@@ -40,7 +45,7 @@ struct ContentView: View {
     
     var grid: some View {
         LazyVGrid(columns: columns, spacing: 10) {
-            ForEach(model.events, id: \.self) { event in
+            ForEach(events) { event in
                 SmallCardView(event: event)
                     .contextMenu {
                         Button(action: {
@@ -53,15 +58,12 @@ struct ContentView: View {
                             Image(systemName: "slider.horizontal.3")
                         }
                         
-                        Button(action: {
-                            model.removeEvent(event) { _ in }
-                        }) {
+                        Button(action: { DataProvider.shared.removeEvent(event, from: context) }) {
                             Text("Delete")
                             Image(systemName: "trash")
                         }
                     }
-                    .id("\(showModal)\(event.hashValue)")
-                //.animation(.linear)
+                    .id("\(showModal)\(event.id!)")
             }
             
             AddEventButtonView() {
@@ -101,23 +103,11 @@ struct ContentView: View {
                 .allowsHitTesting(false)
         )
         .sheet(isPresented: $showModal) {
-            AddEventView(showModal: $showModal, existingEvent: modifiableEvent) {
-                if let event = $0 {
-                    self.model.removeEvent(modifiableEvent) { _ in }
-                    
-                    self.model.addEvent(event) { result in
-                        if case .failure(let error) = result {
-                            self.errorMessage = error.localizedDescription
-                            self.error = true
-                        }
-                    }
-                }
-            }
+            AddEventView(showModal: $showModal, existingEvent: modifiableEvent)
         }
         .alert(isPresented: $error) {
             Alert(
                 title: Text("Could not add event to Calendar"),
-                message: errorMessage.map { Text($0) },
                 dismissButton: .default(Text("OK"))
             )
         }
@@ -128,7 +118,7 @@ struct ContentView: View {
                 -1...0 ~= $0.timeRemaining
             }
             
-            if model.events.contains(where: eventHasJustEnded) {
+            if events.contains(where: eventHasJustEnded) {
                 onEventEnd()
             }
         }
@@ -137,43 +127,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().previewDevice("iPhone 11 Pro").environmentObject(Model(events: [
-            Event(
-                name: "My Birthday",
-                start: .init(),
-                end: .init(timeIntervalSinceNow: 186400),
-                gradientIndex: 7
-            ),
-            Event(
-                name: "My Anniversary",
-                start: .init(),
-                end: .init(timeIntervalSinceNow: 2862500),
-                gradientIndex: 1
-            ),
-            Event(
-                name: "New Year's",
-                start: .init(),
-                end: .init(timeIntervalSinceNow: 86400),
-                gradientIndex: 10
-            ),
-            Event(
-                name: "Christmas",
-                start: .init(),
-                end: .init(timeIntervalSinceNow: 1086400),
-                gradientIndex: 0
-            ),
-            Event(
-                name: "New Year's",
-                start: .init(),
-                end: .init(timeIntervalSinceNow: 86400),
-                gradientIndex: 9
-            ),
-            Event(
-                name: "Christmas",
-                start: .init(),
-                end: .init(timeIntervalSinceNow: 1086400),
-                gradientIndex: 11
-            )
-        ]))
+        EmptyView()
     }
 }

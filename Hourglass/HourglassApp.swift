@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ShortcutItemEnvironmentKey: EnvironmentKey {
     static let defaultValue: UIApplicationShortcutItem? = nil
@@ -24,11 +25,36 @@ extension EnvironmentValues {
 @main
 struct HourglassApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
+    let container: NSPersistentContainer = {
+        let pc = NSPersistentContainer(name: "Model")
+        pc.loadPersistentStores { _, error in
+            if let error = error {
+                fatalError(error.localizedDescription)
+            }
+        }
+        return pc
+    }()
+    
+    func saveContext() {
+        let context = container.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(Model.shared)
+                .environment(\.managedObjectContext, container.viewContext)
+                .onDisappear {
+                    saveContext()
+                }
         }
     }
 }

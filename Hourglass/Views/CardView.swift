@@ -45,7 +45,7 @@ struct SmallCardView: View {
     }()
     
     var countdownString: String {
-        if (Date() >= event.end) {
+        if (Date() >= event.endDate!) {
             return "Complete!"
         }
         
@@ -61,13 +61,13 @@ struct SmallCardView: View {
         VStack {
             HStack {
                 VStack {
-                    Text(event.name)
+                    Text(event.name!)
                         .font(.title3)
                         .fontWeight(.bold)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(.white)
 
-                    Text(dateFormatter.string(from: event.end))
+                    Text(dateFormatter.string(from: event.endDate!))
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(Color.white.opacity(0.75))
@@ -110,18 +110,18 @@ struct SmallCardView: View {
         .contentShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
         .cornerRadius(radius)
         .shadow(color: event.gradient.stops[0].color.opacity(0.3), radius: 3, x: 0, y: 3)
-        .accessibility(label: Text("\(event.name) event card."))
+        .accessibility(label: Text("\(event.name!) event card."))
         .accessibility(value: Text("\(countdownString) remaining"))
     }
 }
 
-struct CardView_Previews: PreviewProvider {    
+struct CardView_Previews: PreviewProvider {
+    static let event: Event = {
+        let _event = Event()
+        return _event
+    }()
+    
     static var previews: some View {
-        SmallCardView(event: Event(
-            name: "My Birthday",
-            start: .init(timeIntervalSinceNow: -40000),
-            end: .init(timeIntervalSinceNow: 86400),
-            gradientIndex: 0
-        )).previewDevice("iPhone 11 Pro").frame(width: .cardHeight)
+        SmallCardView(event: event).previewDevice("iPhone 11 Pro").frame(width: .cardHeight)
     }
 }

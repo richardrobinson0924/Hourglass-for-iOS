@@ -33,6 +33,11 @@
 		07B8A1AC24B9087F00D8FDD3 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075709ED24ADA4CE00F1AE17 /* Event.swift */; };
 		07B8A1AE24B9E1E200D8FDD3 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B8A1AD24B9E1E200D8FDD3 /* EventView.swift */; };
 		07CBA62A24B755C500D66D5F /* Success-1.caf in Resources */ = {isa = PBXBuildFile; fileRef = 07CBA62924B755C500D66D5F /* Success-1.caf */; };
+		07CBE12424BD4AA200725A13 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07CBE12224BD4AA200725A13 /* Model.xcdatamodeld */; };
+		07CBE12624BD4AA200725A13 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07CBE12224BD4AA200725A13 /* Model.xcdatamodeld */; };
+		07CBE12724BD4AA200725A13 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07CBE12224BD4AA200725A13 /* Model.xcdatamodeld */; };
+		07CBE12824BD4AA200725A13 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07CBE12224BD4AA200725A13 /* Model.xcdatamodeld */; };
+		07CBE12924BD4ABA00725A13 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07CBE12224BD4AA200725A13 /* Model.xcdatamodeld */; };
 		07E381E124B8DC4F005658C6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07E381E024B8DC4F005658C6 /* Assets.xcassets */; };
 		07E381E824B8DC4F005658C6 /* HourglassWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 07E381E724B8DC4F005658C6 /* HourglassWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		07E381ED24B8DC4F005658C6 /* HourglassApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E381EC24B8DC4F005658C6 /* HourglassApp.swift */; };
@@ -156,6 +161,7 @@
 		07B8A1A624B9085800D8FDD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		07B8A1AD24B9E1E200D8FDD3 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
 		07CBA62924B755C500D66D5F /* Success-1.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Success-1.caf"; sourceTree = "<group>"; };
+		07CBE12324BD4AA200725A13 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		07E381DE24B8DC4E005658C6 /* HourglassWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HourglassWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07E381E024B8DC4F005658C6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		07E381E224B8DC4F005658C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -260,6 +266,7 @@
 				075709E224ADA43B00F1AE17 /* Assets.xcassets */,
 				075709E724ADA43B00F1AE17 /* Info.plist */,
 				075709E424ADA43B00F1AE17 /* Preview Content */,
+				07CBE12224BD4AA200725A13 /* Model.xcdatamodeld */,
 			);
 			path = Hourglass;
 			sourceTree = "<group>";
@@ -596,6 +603,7 @@
 				075709E124ADA43900F1AE17 /* ContentView.swift in Sources */,
 				077EA59624B4DF67007E4654 /* JokeView.swift in Sources */,
 				07B8A1AE24B9E1E200D8FDD3 /* EventView.swift in Sources */,
+				07CBE12424BD4AA200725A13 /* Model.xcdatamodeld in Sources */,
 				0757CFC924AF2B2100A156B6 /* AddEventView.swift in Sources */,
 				07367D3224B39BE400C41B4F /* JokeModel.swift in Sources */,
 				073AE39124B0688F0031ACBA /* AddEventButtonView.swift in Sources */,
@@ -615,6 +623,7 @@
 			files = (
 				0757CFC424AF171A00A156B6 /* RingView.swift in Sources */,
 				0757CF9F24AF0AB200A156B6 /* Event.swift in Sources */,
+				07CBE12924BD4ABA00725A13 /* Model.xcdatamodeld in Sources */,
 				0757CF9224AF08F300A156B6 /* HourglassWidget.swift in Sources */,
 				0757CFC724AF1B2900A156B6 /* CardView.swift in Sources */,
 			);
@@ -626,6 +635,7 @@
 			files = (
 				07B8A1AC24B9087F00D8FDD3 /* Event.swift in Sources */,
 				07B8A1A524B9085800D8FDD3 /* HourglassTests.swift in Sources */,
+				07CBE12824BD4AA200725A13 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -638,6 +648,7 @@
 				07E381F524B8DC4F005658C6 /* ComplicationController.swift in Sources */,
 				07E381ED24B8DC4F005658C6 /* HourglassApp.swift in Sources */,
 				07E381F324B8DC4F005658C6 /* NotificationView.swift in Sources */,
+				07CBE12624BD4AA200725A13 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -648,6 +659,7 @@
 				07E3822A24B8E294005658C6 /* Intents.intentdefinition in Sources */,
 				07E3822C24B8E66C005658C6 /* Event.swift in Sources */,
 				07E3822224B8E260005658C6 /* IntentHandler.swift in Sources */,
+				07CBE12724BD4AA200725A13 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1129,6 +1141,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		07CBE12224BD4AA200725A13 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				07CBE12324BD4AA200725A13 /* Model.xcdatamodel */,
+			);
+			currentVersion = 07CBE12324BD4AA200725A13 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 075709D324ADA43900F1AE17 /* Project object */;
 }

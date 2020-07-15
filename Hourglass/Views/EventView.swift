@@ -21,7 +21,7 @@ struct EventView: View {
     }
     
     var countdownString: String {
-        if (Date() >= event.end) {
+        if (Date() >= event.endDate!) {
             return "Complete!"
         }
         
@@ -48,7 +48,7 @@ struct EventView: View {
                     
                     Spacer()
                     
-                    Text(event.name)
+                    Text("\(event.name!)")
                         .font(Font.system(.title3).weight(.semibold))
                         .foregroundColor(.white)
                     
@@ -115,12 +115,15 @@ struct HourglassView<Background: View, Content: View>: View {
 }
 
 struct EventView_Previews: PreviewProvider {
-    static let event = Event(
-        name: "My Birthday",
-        start: Date().addingTimeInterval(-86400),
-        end: Date().addingTimeInterval(2 * 86400),
-        gradientIndex: 6
-    )
+    static let event: Event = {
+        let e = Event()
+        e.name = "My Birthday"
+        e.startDate = Date().addingTimeInterval(-86400)
+        e.endDate = Date().addingTimeInterval(2 * 86400)
+        e.colorIndex = 6
+        
+        return e
+    }()
     
     static var previews: some View {
         EventView(event: event)

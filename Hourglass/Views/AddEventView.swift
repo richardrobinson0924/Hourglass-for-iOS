@@ -9,6 +9,7 @@ import SwiftUI
 import EventKit
 import EventKitUI
 import Combine
+import CoreData
 
 struct ColorChooser<S>: View where S : ShapeStyle {
     let options: [S]
@@ -67,13 +68,12 @@ struct AddEventView: View {
     @State var eventName: String = ""
     @State var endDate = Date().addingTimeInterval(60)
     @State var isAddedToCalendar = true
-    
     @State var gradientIndex: Int = 0
-    
+        
     @Binding var showModal: Bool
     
-    @EnvironmentObject var model: Model
-    
+    @Environment(\.managedObjectContext) var context: NSManagedObjectContext
+        
     let existingEvent: Event?
     
     let linearGradients: [LinearGradient] = Gradient.gradients.map {
@@ -87,10 +87,6 @@ struct AddEventView: View {
     var accentColor: Color {
         Gradient.gradients[gradientIndex].stops.first!.color
     }
-    
-    /// This closure is invoked when the view is dimissed, with a newly created Event passed as its parameter.
-    /// If the user cancelled this action, `nil` is passed as the parameter
-    let onDismiss: (Event?) -> Void
     
     var body: some View {
         NavigationView {
@@ -131,48 +127,38 @@ struct AddEventView: View {
                     Text("Cancel").foregroundColor(accentColor)
                 }, trailing: Button(action: {
                     let adjustedEnd = Calendar.current.date(bySetting: .second, value: 0, of: endDate)!
+                                        
+                    DataProvider.shared.removeEvent(existingEvent, from: context)
                     
-                    let event = Event(
+                    DataProvider.shared.addEvent(
+                        in: context,
                         name: eventName,
-                        start: existingEvent?.start ?? Date(),
-                        end: adjustedEnd,
-                        gradientIndex: gradientIndex
+                        range: (existingEvent?.startDate ?? Date())...adjustedEnd,
+                        colorIndex: gradientIndex,
+                        shouldAddToCalendar: isAddedToCalendar
                     )
                     
-                    onDismiss(event)
+                    self.showModal.toggle()
                 }) {
                     Text("Add").bold().foregroundColor(accentColor)
-                }.disabled(eventName == "" || endDate <= Date()))
-            .accentColor(accentColor)
-            .onAppear {
-                if let event = existingEvent {
-                    self.eventName = event.name
-                    self.endDate = event.end
-                    self.gradientIndex = event.gradientIndex
                 }
-            }
+                .disabled(eventName == "" || endDate <= Date()))
+                .accentColor(accentColor)
+                .onAppear {
+                    if let event = existingEvent {
+                        self.eventName = event.name!
+                        self.endDate = event.endDate!
+                        self.gradientIndex = Int(event.colorIndex)
+                    }
+                }
         }
     }
     
 }
 
-struct AView: View {
-    @State var showSheetView = true
-    
-    var body: some View {
-        Button(action: {
-            self.showSheetView.toggle()
-        }) {
-            Text("Show Sheet View")
-        }.sheet(isPresented: $showSheetView) {
-            AddEventView(showModal: $showSheetView, existingEvent: nil) { _ in }
-        }
-    }
-}
 
 struct AddEventView_Previews: PreviewProvider {
-    
     static var previews: some View {
-        AView()
+        EmptyView()
     }
 }

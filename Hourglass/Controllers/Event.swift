@@ -10,29 +10,14 @@ import SwiftUI
 import EventKit
 import WidgetKit
 import Intents
+import CoreData
 
 public extension CGFloat {
     static let cardHeight: CGFloat = 155
 }
 
-public struct Event : Codable, Hashable, Equatable {
-    let name: String
-    let start: Date
-    let end: Date
-    let gradientIndex: Int
-    
-    var gradient: Gradient {
-        Gradient.gradients[gradientIndex]
-    }
-    
-    var timeRemaining: TimeInterval {
-        end.timeIntervalSinceNow
-    }
-    
-    var progress: Double {
-        let value = 1 - end.timeIntervalSinceNow / end.timeIntervalSince(start)
-        return 0...1 ~= value ? value : 1
-    }    
+extension Date {
+    static var now: Date { Date() }
 }
 
 class UserNotifications {
@@ -55,7 +40,7 @@ class UserNotifications {
             
             let content = UNMutableNotificationContent()
             content.title = "Countdown complete!"
-            content.body = "The countdown to \(event.name) is complete! 🎉"
+            content.body = "The countdown to \(event.name!) is complete! 🎉"
             content.categoryIdentifier = "countdown"
             content.sound = UNNotificationSound(
                 named: UNNotificationSoundName(rawValue: "Success 1.caf")
@@ -64,7 +49,7 @@ class UserNotifications {
             let trigger = UNCalendarNotificationTrigger(
                 dateMatching: Calendar.current.dateComponents(
                     [.year, .month, .day, .hour, .minute],
-                    from: event.end
+                    from: event.endDate!
                 ),
                 repeats: false
             )
@@ -96,8 +81,8 @@ public class UserCalendar {
     private func toEventKitEvent(_ event: Event) -> EKEvent {
         let calendarEvent = EKEvent(eventStore: self.store)
         calendarEvent.title = event.name
-        calendarEvent.startDate = event.end
-        calendarEvent.endDate = event.end.addingTimeInterval(3600)
+        calendarEvent.startDate = event.endDate!
+        calendarEvent.endDate = event.endDate!.addingTimeInterval(3600)
         calendarEvent.calendar = self.store.defaultCalendarForNewEvents
         
         return calendarEvent
@@ -153,90 +138,82 @@ public class UserCalendar {
     }
 }
 
-class Model : Codable, ObservableObject {
-    private enum CodingKeys : String, CodingKey {
-        case events
-        case sortedKey
+extension Event {
+    var gradient: Gradient {
+        Gradient.gradients[Int(colorIndex)]
     }
     
-    @Published var _events: [Event] = []
-    
-    var events: [Event] {
-        get { _events }
-        set(newValue) {
-            _events = newValue.sorted(by: Model.SortableKeyPaths[sortedKey]!)
-            save()
-        }
+    var timeRemaining: TimeInterval {
+        endDate!.timeIntervalSinceNow
     }
     
-    @Published var _sortedKey: String = SortableKeyPaths.keys.first!
-    
-    var sortedKey: String {
-        get { _sortedKey }
-        set(newValue) {
-            _events.sort(by: Model.SortableKeyPaths[newValue]!)
-            save()
-        }
-    }
-    
-    init(events: [Event] = []) {
-        self.events = events
-    }
-    
-    required init(from decoder: Decoder) throws {
-        let container = try? decoder.container(keyedBy: CodingKeys.self)
-        let events = try? container?.decode([Event].self, forKey: .events)
-        let sortKey = try? container?.decode(String.self, forKey: .sortedKey)
-        
-        self.events = events ?? []
-        self.sortedKey = sortKey ?? Model.SortableKeyPaths.keys.first!
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try! container.encode(events, forKey: .events)
-        try! container.encode(sortedKey, forKey: .sortedKey)
+    var progress: Double {
+        let value = 1 - endDate!.timeIntervalSinceNow / endDate!.timeIntervalSince(startDate!)
+        return 0...1 ~= value ? value : 1
     }
 }
 
-extension Model {
-    private static let key = "hourglass_model"
-    
-    static let SortableKeyPaths: [String : (Event, Event) -> Bool] = [
-        "Event End Date" : { $0.end < $1.end },
-        "Date Added" : { $0.start < $1.start }
-    ]
-    
-    static var shared: Model {
-        let data = UserDefaults(suiteName: "group.hourglass")?.data(forKey: key)
-        
-        if let data = data {
-            return try! JSONDecoder().decode(Model.self, from: data)
-        } else {
-            return Model()
-        }
-    }
-}
+extension Event : Identifiable {}
 
-extension Model {
-    func addEvent(_ event: Event, _ completion: @escaping (Result<Bool, Error>) -> Void) {
-        self.events.append(event)
-        UserCalendar.shared.addEvent(event, completion)
+class DataProvider {
+    static let shared = DataProvider()
+    
+    static func allEventsFetchRequest() -> NSFetchRequest<Event> {
+        let request: NSFetchRequest<Event> = Event.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: Defaults.shared.comparatorKey, ascending: true)]
+        return request
+    }
+    
+    func addEvent(in context: NSManagedObjectContext, name: String, range: ClosedRange<Date>, colorIndex: Int, shouldAddToCalendar inCalendar: Bool) {
+        let event = Event(context: context)
+        event.name = name
+        event.startDate = range.lowerBound
+        event.endDate = range.upperBound
+        event.colorIndex = Int64(colorIndex)
+        event.id = UUID()
+        
         UserNotifications.shared.registerEventNotification(event)
+        if inCalendar {
+            UserCalendar.shared.addEvent(event) { _ in }
+        }
     }
     
-    func removeEvent(_ event: Event?, _ completion: @escaping (Result<Bool, Error>) -> Void) {
+    func removeEvent(_ event: Event?, from context: NSManagedObjectContext) {
         guard let event = event else { return }
         
-        self.events.removeAll(where: { $0 == event })
-        UserCalendar.shared.removeEvent(event, completion)
+        context.delete(event)
+        
         UserNotifications.shared.unregisterEventNotification(event)
+        UserCalendar.shared.removeEvent(event) { _ in }
+    }
+}
+
+struct Defaults : Codable {
+    static let comparators: [String: String] = [
+        "Event Date" : "endDate",
+        "Event Name" : "name",
+        "Time Remaining" : "progress"
+    ]
+    
+    var comparatorKey: String = Defaults.comparators["Event Date"]! {
+        didSet {
+            save()
+        }
     }
     
     func save() {
         let data = try! JSONEncoder().encode(self)
-        UserDefaults(suiteName: "group.hourglass")?.set(data, forKey: Model.key)
-        WidgetCenter.shared.reloadTimelines(ofKind: "HourglassWidget")
+        UserDefaults(suiteName: "group.hourglass")?.set(data, forKey: "hourglass.defaults")
+    }
+    
+    static var shared: Defaults {
+        let data = UserDefaults(suiteName: "group.hourglass")?.data(forKey: "hourglass.defaults")
+        
+        if let data = data {
+            return try! JSONDecoder().decode(Defaults.self, from: data)
+        } else {
+            return Defaults()
+        }
     }
 }
 

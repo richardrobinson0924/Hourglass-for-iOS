@@ -6,6 +6,7 @@
 //
 
 import Intents
+import CoreData
 
 class IntentHandler: INExtension, AddEventIntentHandling {
     func resolveAddToCalendar(for intent: AddEventIntent, with completion: @escaping (INBooleanResolutionResult) -> Void) {
@@ -26,23 +27,22 @@ class IntentHandler: INExtension, AddEventIntentHandling {
     
     func handle(intent: AddEventIntent, completion: @escaping (AddEventIntentResponse) -> Void) {
         guard let name = intent.eventName, let end = intent.endDate else { return }
-        let event = Event(
-            name: name,
-            start: Date(),
-            end: Calendar.current.date(from: end)!,
-            gradientIndex: max(intent.color.rawValue - 1, 0)
-        )
-                
-        Model.shared.addEvent(event) { result in
-            switch result {
-            case .failure(let error):
-                print(error.localizedDescription)
-            case .success(false):
-                print("couldn't add to calendar")
-                fallthrough
-            default:
-                completion(.success(eventName: name, endDate: end))
+        
+        let container = NSPersistentContainer(name: "Model")
+        container.loadPersistentStores { _, error in
+            if let error = error {
+                fatalError(error.localizedDescription)
             }
+            
+            DataProvider.shared.addEvent(
+                in: container.viewContext,
+                name: name,
+                range: Date()...Calendar.current.date(from: end)!,
+                colorIndex: max(intent.color.rawValue - 1, 0),
+                shouldAddToCalendar: intent.addToCalendar?.boolValue ?? false
+            )
+            
+            completion(.success(eventName: name, endDate: end))
         }
     }
     
