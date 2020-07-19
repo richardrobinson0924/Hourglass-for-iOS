@@ -35,10 +35,10 @@ class IntentHandler: INExtension, AddEventIntentHandling {
             }
             
             DataProvider.shared.addEvent(
-                in: container.viewContext,
+                to: container.viewContext,
                 name: name,
-                range: Date()...Calendar.current.date(from: end)!,
-                colorIndex: max(intent.color.rawValue - 1, 0),
+                range: DateInterval(start: Date(), end: Calendar.current.date(from: end)!),
+                index: Int16(max(intent.color.rawValue - 1, 0)),
                 shouldAddToCalendar: intent.addToCalendar?.boolValue ?? false
             )
             

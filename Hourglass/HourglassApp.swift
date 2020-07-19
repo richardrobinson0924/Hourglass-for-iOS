@@ -26,7 +26,7 @@ extension EnvironmentValues {
 struct HourglassApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    let container: NSPersistentContainer = {
+    static let container: NSPersistentContainer = {
         let pc = NSPersistentContainer(name: "Model")
         pc.loadPersistentStores { _, error in
             if let error = error {
@@ -35,26 +35,11 @@ struct HourglassApp: App {
         }
         return pc
     }()
-    
-    func saveContext() {
-        let context = container.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, container.viewContext)
-                .onDisappear {
-                    saveContext()
-                }
+            ModelView()
+                .environment(\.managedObjectContext, Self.container.viewContext)
         }
     }
 }

@@ -12,6 +12,13 @@ import WidgetKit
 import Intents
 import CoreData
 
+protocol EventProtocol {
+    var name: String? { get }
+    var startDate: Date? { get }
+    var endDate: Date? { get }
+    var colorIndex: Int16? { get }
+}
+
 public extension CGFloat {
     static let cardHeight: CGFloat = 155
 }
@@ -139,8 +146,16 @@ public class UserCalendar {
 }
 
 extension Event {
+    convenience init(_ name: String, range: DateInterval, theme: Int16) {
+        self.init(entity: Self.entity(), insertInto: nil)
+        self.name = name
+        self.startDate = range.start
+        self.endDate = range.end
+        self.colorIndex = theme
+    }
+    
     var gradient: Gradient {
-        Gradient.gradients[Int(colorIndex)]
+        Gradient.all[Int(colorIndex)]
     }
     
     var timeRemaining: TimeInterval {
@@ -150,10 +165,21 @@ extension Event {
     var progress: Double {
         let value = 1 - endDate!.timeIntervalSinceNow / endDate!.timeIntervalSince(startDate!)
         return 0...1 ~= value ? value : 1
-    }
+    }    
 }
 
 extension Event : Identifiable {}
+
+extension NSManagedObjectContext {
+    func saveIfChanged()  {
+        guard hasChanges else { return }
+        do {
+            try save()
+        } catch {
+            fatalError("\(error)")
+        }
+    }
+}
 
 class DataProvider {
     static let shared = DataProvider()
@@ -164,18 +190,26 @@ class DataProvider {
         return request
     }
     
-    func addEvent(in context: NSManagedObjectContext, name: String, range: ClosedRange<Date>, colorIndex: Int, shouldAddToCalendar inCalendar: Bool) {
+    func addEvent(
+        to context: NSManagedObjectContext,
+        name: String,
+        range: DateInterval,
+        index: Int16,
+        shouldAddToCalendar inCalendar: Bool
+    ) {
         let event = Event(context: context)
         event.name = name
-        event.startDate = range.lowerBound
-        event.endDate = range.upperBound
-        event.colorIndex = Int64(colorIndex)
+        event.startDate = range.start
+        event.endDate = range.end
+        event.colorIndex = index
         event.id = UUID()
         
         UserNotifications.shared.registerEventNotification(event)
         if inCalendar {
             UserCalendar.shared.addEvent(event) { _ in }
         }
+        
+        context.saveIfChanged()
     }
     
     func removeEvent(_ event: Event?, from context: NSManagedObjectContext) {
@@ -185,6 +219,8 @@ class DataProvider {
         
         UserNotifications.shared.unregisterEventNotification(event)
         UserCalendar.shared.removeEvent(event) { _ in }
+        
+        context.saveIfChanged()
     }
 }
 
@@ -218,7 +254,7 @@ struct Defaults : Codable {
 }
 
 public extension Gradient {
-    static let gradients = [
+    static let all = [
         [#colorLiteral(red: 0.9654200673, green: 0.1590853035, blue: 0.2688751221, alpha: 1),#colorLiteral(red: 0.7559037805, green: 0.1139892414, blue: 0.1577021778, alpha: 1)], // red
         [#colorLiteral(red: 0.9338900447, green: 0.4315618277, blue: 0.2564975619, alpha: 1),#colorLiteral(red: 0.8518816233, green: 0.1738803983, blue: 0.01849062555, alpha: 1)], // deep orange
         [#colorLiteral(red: 0.9953531623, green: 0.54947716, blue: 0.1281470656, alpha: 1),#colorLiteral(red: 0.9409626126, green: 0.7209432721, blue: 0.1315650344, alpha: 1)], // orange

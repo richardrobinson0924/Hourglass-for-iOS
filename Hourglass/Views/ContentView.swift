@@ -19,14 +19,13 @@ struct ContentView: View {
     @State var now: Date = Date()
     @State var confettiView = ConfettiUIView()
     
-    let timer = Timer.publish(every: 1, on: .current, in: .common).autoconnect()
-    let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10), count: 2)
-    
-    @FetchRequest(
-        fetchRequest: DataProvider.allEventsFetchRequest()
-    ) var events: FetchedResults<Event>
-    
     @Environment(\.managedObjectContext) var context: NSManagedObjectContext
+    
+    let events: FetchedResults<Event>
+    
+    let timer = Timer.publish(every: 1, on: .current, in: .common).autoconnect()
+    
+    let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10), count: 2)
     
     var alertButtons: [Alert.Button] {
 //        return Model.SortableKeyPaths.map { key, _ in
@@ -45,25 +44,31 @@ struct ContentView: View {
     
     var grid: some View {
         LazyVGrid(columns: columns, spacing: 10) {
-            ForEach(events) { event in
-                SmallCardView(event: event)
-                    .contextMenu {
-                        Button(action: {
-                            self.modifiableEvent = event
-                            withAnimation {
-                                self.showModal = true
-                            }
-                        }) {
-                            Text("Edit")
-                            Image(systemName: "slider.horizontal.3")
+            ForEach(events, id: \.id) { event in
+                SmallCardView(
+                    name: event.name!,
+                    range: DateInterval(start: event.startDate!, end: event.endDate!),
+                    gradient: Gradient.all[Int(event.colorIndex)],
+                    shape: RoundedRectangle(cornerRadius: 25.0, style: .continuous)
+                )
+                .frame(height: 155)
+                .contextMenu {
+                    Button(action: {
+                        self.modifiableEvent = event
+                        withAnimation {
+                            self.showModal = true
                         }
-                        
-                        Button(action: { DataProvider.shared.removeEvent(event, from: context) }) {
-                            Text("Delete")
-                            Image(systemName: "trash")
-                        }
+                    }) {
+                        Text("Edit")
+                        Image(systemName: "slider.horizontal.3")
                     }
-                    .id("\(showModal)\(event.id!)")
+                    
+                    Button(action: { DataProvider.shared.removeEvent(event, from: context) }) {
+                        Text("Delete")
+                        Image(systemName: "trash")
+                    }
+                }
+                .id("\(showModal)\(event.id!)")
             }
             
             AddEventButtonView() {
@@ -103,7 +108,21 @@ struct ContentView: View {
                 .allowsHitTesting(false)
         )
         .sheet(isPresented: $showModal) {
-            AddEventView(showModal: $showModal, existingEvent: modifiableEvent)
+            AddEventView(existingEvent: modifiableEvent) { details in
+                if let (name, range, index, inCalendar) = details {
+                    DataProvider.shared.removeEvent(modifiableEvent, from: context)
+                    
+                    DataProvider.shared.addEvent(
+                        to: context,
+                        name: name,
+                        range: range,
+                        index: index,
+                        shouldAddToCalendar: inCalendar
+                    )
+                }
+                
+                self.showModal.toggle()
+            }
         }
         .alert(isPresented: $error) {
             Alert(
@@ -114,11 +133,7 @@ struct ContentView: View {
         .onReceive(timer) { _ in
             if !showModal { self.now = Date() }
             
-            let eventHasJustEnded: (Event) -> Bool = {
-                -1...0 ~= $0.timeRemaining
-            }
-            
-            if events.contains(where: eventHasJustEnded) {
+            if events.contains(where: { -1...0 ~= $0.timeRemaining }) {
                 onEventEnd()
             }
         }
@@ -128,5 +143,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         EmptyView()
+            .previewDevice("iPhone 11 Pro")
     }
 }

@@ -11,6 +11,7 @@ import EventKitUI
 import Combine
 import CoreData
 
+
 struct ColorChooser<S>: View where S : ShapeStyle {
     let options: [S]
     @Binding var selectedIndex: Int
@@ -64,19 +65,23 @@ struct ColorChooser<S>: View where S : ShapeStyle {
     }
 }
 
+typealias EventDetails = (
+    name: String,
+    range: DateInterval,
+    theme: Int16,
+    inCalendar: Bool
+)
+
 struct AddEventView: View {
     @State var eventName: String = ""
     @State var endDate = Date().addingTimeInterval(60)
     @State var isAddedToCalendar = true
     @State var gradientIndex: Int = 0
-        
-    @Binding var showModal: Bool
-    
-    @Environment(\.managedObjectContext) var context: NSManagedObjectContext
-        
+                
     let existingEvent: Event?
+    let onDismiss: (EventDetails?) -> Void
     
-    let linearGradients: [LinearGradient] = Gradient.gradients.map {
+    let linearGradients: [LinearGradient] = Gradient.all.map {
         LinearGradient(
             gradient: $0,
             startPoint: .topTrailing,
@@ -85,7 +90,27 @@ struct AddEventView: View {
     }
     
     var accentColor: Color {
-        Gradient.gradients[gradientIndex].stops.first!.color
+        Gradient.all[gradientIndex].stops.first!.color
+    }
+    
+    func onAddEvent() {
+        let adjustedEnd = Calendar.current.date(bySetting: .second, value: 0, of: endDate)!
+        
+        let props = (
+            name: eventName,
+            range: DateInterval(
+                start: existingEvent?.startDate ?? Date(),
+                end: adjustedEnd
+            ),
+            theme: Int16(gradientIndex),
+            inCalendar: isAddedToCalendar
+        )
+        
+        onDismiss(props)
+    }
+    
+    var isDisabled: Bool {
+        eventName == "" || endDate <= Date()
     }
     
     var body: some View {
@@ -122,35 +147,23 @@ struct AddEventView: View {
             )
             .navigationBarItems(
                 leading: Button(action: {
-                    self.showModal.toggle()
+                    onDismiss(nil)
                 }) {
                     Text("Cancel").foregroundColor(accentColor)
-                }, trailing: Button(action: {
-                    let adjustedEnd = Calendar.current.date(bySetting: .second, value: 0, of: endDate)!
-                                        
-                    DataProvider.shared.removeEvent(existingEvent, from: context)
-                    
-                    DataProvider.shared.addEvent(
-                        in: context,
-                        name: eventName,
-                        range: (existingEvent?.startDate ?? Date())...adjustedEnd,
-                        colorIndex: gradientIndex,
-                        shouldAddToCalendar: isAddedToCalendar
-                    )
-                    
-                    self.showModal.toggle()
-                }) {
-                    Text("Add").bold().foregroundColor(accentColor)
+                },
+                trailing: Button(action: onAddEvent) {
+                    Text("Add").bold().foregroundColor(isDisabled ? .gray : accentColor)
                 }
-                .disabled(eventName == "" || endDate <= Date()))
-                .accentColor(accentColor)
-                .onAppear {
-                    if let event = existingEvent {
-                        self.eventName = event.name!
-                        self.endDate = event.endDate!
-                        self.gradientIndex = Int(event.colorIndex)
-                    }
+                .disabled(isDisabled)
+            )
+            .accentColor(accentColor)
+            .onAppear {
+                if let event = existingEvent {
+                    self.eventName = event.name!
+                    self.endDate = event.endDate!
+                    self.gradientIndex = Int(event.colorIndex)
                 }
+            }
         }
     }
     
@@ -159,6 +172,6 @@ struct AddEventView: View {
 
 struct AddEventView_Previews: PreviewProvider {
     static var previews: some View {
-        EmptyView()
+        AddEventView(existingEvent: nil) { _ in }
     }
 }
