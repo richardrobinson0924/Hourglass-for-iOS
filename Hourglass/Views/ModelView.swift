@@ -21,7 +21,7 @@ struct ModelView: View {
 }
 
 struct ModelView_Previews: PreviewProvider {
-    static let context = HourglassApp.container.viewContext
+    static let context = DataProvider.shared.container.viewContext
     
     static var previews: some View {
 //        let event = Event(context: context)

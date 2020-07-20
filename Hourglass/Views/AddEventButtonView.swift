@@ -8,34 +8,22 @@
 import SwiftUI
 
 struct AddEventButtonView: View {
-    let action: () -> Void
-
     var body: some View {
-        Image(systemName: "hourglass.badge.plus")
-            .renderingMode(.original)
-            .scaleEffect(1.75)
-            .frame(height: .cardHeight)
-            .frame(maxWidth: .infinity)
-            .background(
-                Color.black.opacity(0.01)
-            )
+        RoundedRectangle(cornerRadius: 24.0, style: .continuous)
+            .stroke(Color.blue, lineWidth: 3.0)
             .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .strokeBorder(Color.blue, lineWidth: 3)
+                Image(systemName: "hourglass.badge.plus")
+                    .renderingMode(.original)
+                    .imageScale(.large)
+                    .scaleEffect(1.3)
             )
-            .animation(.linear(duration: 0.1))
-            .onTapGesture {
-                withAnimation {
-                    action()
-                }
-            }
+            .aspectRatio(1.0, contentMode: .fill)
     }
 }
 
 struct AddEventButtonView_Previews: PreviewProvider {
-    @State static var showModal = false
-        
     static var previews: some View {
-        AddEventButtonView() { }
+        AddEventButtonView()
+            .previewLayout(.fixed(width: 155, height: 155))
     }
 }

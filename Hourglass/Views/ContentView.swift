@@ -48,22 +48,23 @@ struct ContentView: View {
                 SmallCardView(
                     name: event.name!,
                     range: DateInterval(start: event.startDate!, end: event.endDate!),
-                    gradient: Gradient.all[Int(event.colorIndex)],
-                    shape: RoundedRectangle(cornerRadius: 25.0, style: .continuous)
+                    gradient: Gradient.all[Int(event.colorIndex)]
                 )
-                .frame(height: 155)
+                .aspectRatio(1.0, contentMode: ContentMode.fill)
                 .contextMenu {
-                    Button(action: {
+                    Button {
                         self.modifiableEvent = event
                         withAnimation {
                             self.showModal = true
                         }
-                    }) {
+                    } label: {
                         Text("Edit")
                         Image(systemName: "slider.horizontal.3")
                     }
                     
-                    Button(action: { DataProvider.shared.removeEvent(event, from: context) }) {
+                    Button {
+                        DataProvider.shared.removeEvent(event, from: context)
+                    } label: {
                         Text("Delete")
                         Image(systemName: "trash")
                     }
@@ -71,18 +72,22 @@ struct ContentView: View {
                 .id("\(showModal)\(event.id!)")
             }
             
-            AddEventButtonView() {
-                self.modifiableEvent = nil
-                self.showModal = true
-            }
+            AddEventButtonView()
+                .onTapGesture {
+                    self.modifiableEvent = nil
+                    self.showModal = true
+                }
         }
         .navigationBarTitle(Text("My Events"), displayMode: .large)
         .navigationBarItems(
-            leading: Button(action: { }) {
+            leading: Button {
+            } label: {
                 Image(systemName: "ellipsis")
                     .imageScale(.large)
             },
-            trailing: Button(action: { self.showPopover = true }) {
+            trailing: Button {
+                self.showPopover = true
+            } label: {
                 Image(systemName: "arrow.up.arrow.down").imageScale(.large)
             }
             .actionSheet(isPresented: $showPopover) {

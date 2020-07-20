@@ -10,61 +10,73 @@ import SwiftUI
 import Intents
 import CoreData
 
-
 struct Provider: TimelineProvider {
-    @FetchRequest(fetchRequest: DataProvider.allEventsFetchRequest()) var events: FetchedResults<Event>
+    let managedObjectContext: NSManagedObjectContext
+    var endTimelineProvided = false
     
     public func snapshot(with context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let date = Date()
-        
-        let event = events.first ?? Event(
-            "---------",
-            range: DateInterval(start: Date(), duration: .oneDay),
-            theme: 0
-        )
-    
-        let entry = SimpleEntry(date: date, event: event)
-        completion(entry)
+        completion(HourglassWidget.placeholderEntry)
     }
     
     public func timeline(with context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        let date = Date()
-        let nextUpdateDate = Calendar.current.date(byAdding: .second, value: 1, to: date)!
-
-        var entry: SimpleEntry?
+        let now = Date()
+        
+        let fetchRequest = DataProvider.allEventsFetchRequest()
+        fetchRequest.fetchLimit = 1
+        let events = try! self.managedObjectContext.fetch(fetchRequest)
+        
+        let entry: Entry
+        let targetDate: Date
+        
         if let event = events.first {
-            entry = SimpleEntry(date: date, event: event)
+            targetDate = endTimelineProvided
+                ? now + .day * 10
+                : event.endDate!
+            
+            entry = SimpleEntry(
+                date: targetDate,
+                name: event.name!,
+                range: .init(start: event.startDate!, end: event.endDate!),
+                gradient: Gradient.all[Int(event.colorIndex)]
+            )
+        } else {
+            targetDate = now + .day * 10
+            entry = HourglassWidget.placeholderEntry
         }
-
-        let timeline = Timeline(entries: entry == nil ? [] : [entry!], policy: .after(nextUpdateDate))
+        
+        let timeline = Timeline(entries: [entry], policy: .after(targetDate))
         completion(timeline)
     }
 }
 
 struct SimpleEntry: TimelineEntry {
+    static let closeEnoughFactor: TimeInterval = 2.0 * 60
+    
     public let date: Date
-    public let event: Event
-}
-
-struct PlaceholderView : View {
-    @Environment(\.widgetFamily) var family: WidgetFamily
+    
+    public let name: String
+    public let range: DateInterval
+    public let gradient: Gradient
+    
+    var isCloseToEnd: Bool {
+        return -Self.closeEnoughFactor...Self.closeEnoughFactor ~= range.end.timeIntervalSinceNow
+    }
+    
+    var relevance: TimelineEntryRelevance? {
+        let timeSinceNow = range.end.timeIntervalSinceNow
         
-    var body: some View {
-        EmptyView()
-//        WidgetCardView(event: Event(
-//            "---------",
-//            range: DateInterval(start: .init(), duration: .oneDay),
-//            theme: 0
-//        ))
+        return isCloseToEnd
+            ? TimelineEntryRelevance(score: 100.0, duration: timeSinceNow + Self.closeEnoughFactor)
+            : TimelineEntryRelevance(score: 10.0)
     }
 }
 
 struct HourglassWidgetEntryView : View {
     @Environment(\.widgetFamily) var family: WidgetFamily
-    let event: Event
+    let entry: SimpleEntry
     
     var body: some View {
-        EmptyView()
+        SmallCardView(name: entry.name, range: entry.range, gradient: entry.gradient)
     }
 }
 
@@ -72,16 +84,25 @@ struct HourglassWidgetEntryView : View {
 struct HourglassWidget: Widget {
     private let kind: String = "HourglassWidget"
     
+    static let placeholderEntry = SimpleEntry(
+        date: .now,
+        name: "-----------",
+        range: .init(start: .now, duration: .oneDay - 59),
+        gradient: Gradient.all[9]
+    )
+    
+    let container = DataProvider.shared.container
+    
     public var body: some WidgetConfiguration {
         StaticConfiguration(
             kind: kind,
-            provider: Provider(),
-            placeholder: PlaceholderView()
+            provider: Provider(managedObjectContext: container.viewContext),
+            placeholder: HourglassWidgetEntryView(entry: Self.placeholderEntry)
         ) { entry in
-            HourglassWidgetEntryView(event: entry.event)
+            HourglassWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Upcoming Event")
+        .description("Displays the next upcomong event in Hourglass.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
@@ -89,9 +110,25 @@ struct HourglassWidget: Widget {
 struct Widget_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            PlaceholderView()
+            HourglassWidgetEntryView(entry: HourglassWidget.placeholderEntry)
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
                 .previewDevice("iPhone 11 Pro")
         }
+    }
+}
+
+extension Date {
+    static func +(_ date: Self, _ component: Calendar.Component) -> Date {
+        date + (component, 1)
+    }
+    
+    static func +(_ date: Self, _ tuple: (Calendar.Component, Int)) -> Date {
+        Calendar.current.date(byAdding: tuple.0, value: tuple.1, to: date)!
+    }
+}
+
+extension Calendar.Component {
+    static func *(_ component: Self, _ multiplier: Int) -> (Self, Int) {
+        (component, multiplier)
     }
 }

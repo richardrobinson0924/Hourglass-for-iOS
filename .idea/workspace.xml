@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="44b08282-3d2a-4b02-aac4-4b7ada34c5e7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/Hourglass.xcodeproj/xcuserdata/richardrobinson.xcuserdatad/xcschemes/xcschememanagement.plist" beforeDir="false" afterPath="$PROJECT_DIR$/Hourglass.xcodeproj/xcuserdata/richardrobinson.xcuserdatad/xcschemes/xcschememanagement.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Hourglass/Views/AddEventButtonView.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Hourglass/Views/AddEventButtonView.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Hourglass/Views/CardView.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Hourglass/Views/CardView.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Hourglass/Views/ContentView.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Hourglass/Views/ContentView.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +28,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RunManager">
     <configuration name="Hourglass" type="AppleRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Hourglass" TARGET_NAME="Hourglass" CONFIG_NAME="Debug" SCHEME_NAME="Hourglass" IS_LOCATION_SIMULATION_ALLOWED="true" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" RUN_TARGET_PROJECT_NAME="Hourglass" RUN_TARGET_NAME="Hourglass" MAKE_ACTIVE="TRUE" SHOULD_DEBUG_EXTENSIONS="false">
@@ -46,10 +50,17 @@
       <option name="presentableId" value="Default" />
       <updated>1593707863554</updated>
       <workItem from="1593707865186" duration="86000" />
+      <workItem from="1595135995802" duration="224000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="405" y="167" key="SettingsEditor" timestamp="1595136218181">
+      <screen x="0" y="25" width="1792" height="1012" />
+    </state>
+    <state x="405" y="167" key="SettingsEditor/0.25.1792.1012@0.25.1792.1012" timestamp="1595136218181" />
   </component>
 </project>

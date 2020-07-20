@@ -22,24 +22,18 @@ extension EnvironmentValues {
     }
 }
 
+
+
 @main
 struct HourglassApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    static let container: NSPersistentContainer = {
-        let pc = NSPersistentContainer(name: "Model")
-        pc.loadPersistentStores { _, error in
-            if let error = error {
-                fatalError(error.localizedDescription)
-            }
-        }
-        return pc
-    }()
+    let container = DataProvider.shared.container
 
     var body: some Scene {
         WindowGroup {
             ModelView()
-                .environment(\.managedObjectContext, Self.container.viewContext)
+                .environment(\.managedObjectContext, container.viewContext)
         }
     }
 }

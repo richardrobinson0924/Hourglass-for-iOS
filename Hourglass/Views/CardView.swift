@@ -10,7 +10,7 @@ import SwiftUI
 /// An implementation of `ProgressView` built in SwiftUI
 struct ProgressView2<Progress>: View where Progress: BinaryFloatingPoint {
     var value: Progress
-    let color: Color
+    var color: Color = .white
  
     var body: some View {
         GeometryReader { geometry in
@@ -35,12 +35,14 @@ extension DateInterval {
     }
 }
 
-struct SmallCardView<Background: Shape>: View {
+struct SmallCardView: View {
     let name: String
     let range: DateInterval
     let gradient: Gradient
-    
-    let shape: Background
+
+    var responsiveGradient: Gradient {
+        range.progress >= 1.0 ? .init(colors: [.green]) : gradient
+    }
         
     let dateFormatter: DateFormatter = {
         let df = DateFormatter()
@@ -69,11 +71,19 @@ struct SmallCardView<Background: Shape>: View {
         
         return range.progress < 1.0 ? text : Text("Complete!")
     }
+    
+    var shape: some Shape {
+        #if WIDGET
+        return Rectangle()
+        #else
+        return RoundedRectangle(cornerRadius: 24.0, style: .continuous)
+        #endif
+    }
 
     var body: some View {
         shape.fill(
             LinearGradient(
-                gradient: gradient,
+                gradient: responsiveGradient,
                 startPoint: .topTrailing,
                 endPoint: .bottomLeading
             )
@@ -102,14 +112,15 @@ struct SmallCardView<Background: Shape>: View {
                         .monospacedDigit()
                         .weight(.bold)
                 )
+                .tracking(-0.1)
                 .foregroundColor(.white)
                 .padding(.bottom, 11.0)
         
                 Spacer()
 
-                ProgressView2(value: range.progress, color: gradient.color)
+                ProgressView2(value: range.progress, color: responsiveGradient.stops[0].color)
             }
-            .padding(.vertical, 22)
+            .padding(.vertical, 25)
             .padding(.horizontal)
         )
     }
@@ -120,11 +131,10 @@ struct CardView_Previews: PreviewProvider {
         Group {
             SmallCardView(
                 name: "My Birthday",
-                range: DateInterval(start: .now - 10, duration: 60),
-                gradient: Gradient.all[10],
-                shape: RoundedRectangle(cornerRadius: 20, style: .continuous)
+                range: DateInterval(start: .now, duration: 33 * 60 + 33 + 1),
+                gradient: Gradient.all[10]
             )
-            .previewLayout(.fixed(width: 155, height: 155))
+            .previewLayout(.fixed(width: 170, height: 170))
         }
     }
 }
@@ -132,12 +142,6 @@ struct CardView_Previews: PreviewProvider {
 extension TimeInterval {
     /// The `TimeInterval` representing one day (86,400 seconds)
     static let oneDay: TimeInterval = 86400
-}
-
-extension Gradient {
-    var color: Color {
-        self.stops.first?.color ?? .white
-    }
 }
 
 public extension Color {
